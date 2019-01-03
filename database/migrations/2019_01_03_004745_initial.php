@@ -33,7 +33,7 @@ class Initial extends Migration
             $table->timestamps();
         });
 
-        Schema::create('project_notes', function(Blueprint $table) {
+        Schema::create('notes', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('project_id');
             $table->text('content');
@@ -96,7 +96,7 @@ class Initial extends Migration
     {
         Schema::drop('projects');
         Schema::drop('users');
-        Schema::drop('project_notes');
+        Schema::drop('notes');
         Schema::drop('user_project');
         Schema::drop('roles');
         Schema::drop('user_role');
