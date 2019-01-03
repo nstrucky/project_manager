@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('/projects', 'ProjectsController');
+// Route::resource('/tasks', 'TasksController');
+// Route::resource('/notes', 'NotesController');
