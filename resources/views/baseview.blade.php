@@ -4,7 +4,7 @@
 	<title>@yield('title')</title>
 
 	<!-- Font Awesome -->
-  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  	{{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
   	<!-- Bootstrap core CSS -->
   	<link href="css/bootstrap.min.css" rel="stylesheet">
   	<!-- Material Design Bootstrap -->
@@ -15,43 +15,68 @@
   	<link href="css/addons/datatables.min.css" rel="stylesheet">
   	<!-- toastr notifications -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <meta name="_token" content="{{csrf_token()}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 	<style>
+		.pm-header {
+			padding: 10px;
+			background-color: #ccdfff;
+		}
+
 		.top-nav {
 			float: top;
 			width: auto;
-			height: 150px;
-			background-color: #cccccc;
+			height: 100px;
+			background-color: #ccdfff;
 			padding: 10px;
+
 		}
 
 		.left-nav {
 			float: left;
 			width: 200px;
 			height: 1000px;
-			background-color: #cccccc;
+			background-color: #ffe0e0;
 			padding: 10px;
 		}
 
+		.left-nav-btn-group {
+			margin-top: 25px;
+		}
+
 		.btn.navbar-item {
-			float: right;
-			width: 100%;
+			/*float: right;*/
+			/*width: 100%;*/
 
 		}
+
+		.header-title {
+			margin-bottom: 10px;
+			color: #707070;
+		}
+
+
 	</style>
 
-	<nav class="top-nav">
-		
+
+	<nav class="top-nav pm-header">
+		<h1 class="header-title">Project Manager</h1>
+		<div class="btn-group btn-group-lg">
+			<form action="/projects" method="GET"><button id="projects-nav-btn" class="btn btn-lg @yield('button-projects-type') navbar-item">Projects</button></form>
+			<form action="/tasks" method="GET"><button id="tasks-nav-btn" class="btn btn-lg @yield('button-tasks-type') navbar-item">Tasks</button></form>
+			<form action="/users" method="GET"><button id="users-nav-btn" class="btn btn-lg @yield('button-users-type') navbar-item">Users</button></form>
+			<form action="/settings" method="GET"><button id="settings-nav-btn" class="btn btn-lg @yield('button-settings-type') navbar-item">Settings</button></form>			
+		</div>
 	</nav>
+
+
 	<nav class="left-nav">
-		<button id="projects-nav-btn" class="btn btn-md btn-primary navbar-item">Projects</button>
-		<button id="tasks-nav-btn" class="btn btn-md btn-primary navbar-item">Tasks</button>
-		<button id="users-nav-btn" class="btn btn-md btn-primary navbar-item">Users</button>
-		<button id="settings-nav-btn" class="btn btn-md btn-primary navbar-item">Settings</button>
+		@yield('left-nav')
 	</nav>
 
 
