@@ -21,59 +21,55 @@
     <meta name="_token" content="{{csrf_token()}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
+<body style="background-color: #2d2d2d">
 	<style>
-		.pm-header {
-			padding: 10px;
-			background-color: #ccdfff;
-		}
+
 
 		.top-nav {
 			float: top;
-			width: auto;
-			height: 100px;
-			background-color: #ccdfff;
+			width: 100%;
+			height: 135px;
+			background-color: #164899;
 			padding: 10px;
+			box-shadow: 10px 10px 10px;
+			border-collapse: separate;
 
 		}
 
 		.left-nav {
 			float: left;
 			width: 200px;
-			height: 1000px;
-			background-color: #ffe0e0;
+			height: auto;
+			background-color: #303030;
 			padding: 10px;
+			box-shadow: 5px 5px 10px;
+			border-bottom-right-radius: 5px;
+			border-collapse: separate;
 		}
 
 		.left-nav-btn-group {
-			margin-top: 25px;
-		}
-
-		.btn.navbar-item {
-			/*float: right;*/
-			/*width: 100%;*/
-
+/*			margin-top: 25px;*/
 		}
 
 		.header-title {
-			margin-bottom: 10px;
-			color: #707070;
+/*			margin-bottom: 10px;*/
+			color: #e2e2e2;
 		}
 
 
 	</style>
 
-
-	<nav class="top-nav pm-header">
+	<nav class="top-nav">
 		<h1 class="header-title">Project Manager</h1>
-		<div class="btn-group btn-group-lg">
-			<form action="/projects" method="GET"><button id="projects-nav-btn" class="btn btn-lg @yield('button-projects-type') navbar-item">Projects</button></form>
-			<form action="/tasks" method="GET"><button id="tasks-nav-btn" class="btn btn-lg @yield('button-tasks-type') navbar-item">Tasks</button></form>
-			<form action="/users" method="GET"><button id="users-nav-btn" class="btn btn-lg @yield('button-users-type') navbar-item">Users</button></form>
-			<form action="/settings" method="GET"><button id="settings-nav-btn" class="btn btn-lg @yield('button-settings-type') navbar-item">Settings</button></form>			
-		</div>
-	</nav>
 
+			
+			<div class="btn-group btn-group-lg">
+				<form action="/projects" method="GET"><button id="projects-nav-btn" class="btn btn-lg @yield('button-projects-type')">Projects</button></form>
+				<form action="/tasks" method="GET"><button id="tasks-nav-btn" class="btn btn-lg @yield('button-tasks-type')">Tasks</button></form>
+				<form action="/users" method="GET"><button id="users-nav-btn" class="btn btn-lg @yield('button-users-type')">Users</button></form>
+				<form action="/settings" method="GET"><button id="settings-nav-btn" class="btn btn-lg @yield('button-settings-type')">Settings</button></form>			
+			</div>
+	</nav>
 
 	<nav class="left-nav">
 		@yield('left-nav')
