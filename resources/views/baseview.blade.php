@@ -45,10 +45,11 @@
 			box-shadow: 5px 5px 10px;
 			border-bottom-right-radius: 5px;
 			border-collapse: separate;
+			margin-right: 25px;
 		}
 
 		.left-nav-btn-group {
-/*			margin-top: 25px;*/
+			/*margin-top: 25px;*/
 		}
 
 		.header-title {
@@ -61,8 +62,6 @@
 
 	<nav class="top-nav">
 		<h1 class="header-title">Project Manager</h1>
-
-			
 			<div class="btn-group btn-group-lg">
 				<form action="/projects" method="GET"><button id="projects-nav-btn" class="btn btn-lg @yield('button-projects-type')">Projects</button></form>
 				<form action="/tasks" method="GET"><button id="tasks-nav-btn" class="btn btn-lg @yield('button-tasks-type')">Tasks</button></form>
@@ -89,6 +88,8 @@
     <script type="text/javascript" src="js/mdb.min.js"></script>
     <!-- MDBootstrap Datatables  -->
     <script type="text/javascript" src="js/addons/datatables.min.js"></script>
+
+    <script type="text/javascript" src="js/my_functions.js"></script>
         <!-- toastr notifications -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
