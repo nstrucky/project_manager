@@ -64,7 +64,7 @@
 		<h1 class="header-title">Project Manager</h1>
 			<div class="btn-group btn-group-lg">
 				<form action="/projects" method="GET"><button id="projects-nav-btn" class="btn btn-lg @yield('button-projects-type')">Projects</button></form>
-				<form action="/tasks" method="GET"><button id="tasks-nav-btn" class="btn btn-lg @yield('button-tasks-type')">Tasks</button></form>
+				<form action="/tasks" method="GET"><button id="tasks-nav-btn"  class="btn btn-lg @yield('button-tasks-type')">Tasks</button></form>
 				<form action="/users" method="GET"><button id="users-nav-btn" class="btn btn-lg @yield('button-users-type')">Users</button></form>
 				<form action="/settings" method="GET"><button id="settings-nav-btn" class="btn btn-lg @yield('button-settings-type')">Settings</button></form>			
 			</div>

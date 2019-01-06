@@ -2,11 +2,11 @@
 
 
 
-
-function searchTableData(menuId, tableId, inputId) {
-	var filter, input, rows, td, i, txtValue, table, columnIndex, selectionMenu;
-	selectionMenu = document.getElementById(menuId);
-	columnIndex = selectionMenu.options[selectionMenu.selectedIndex].value;
+/**
+ * search table specifying column
+ */
+function searchTableData(columnIndex, tableId, inputId) {
+	var filter, input, rows, td, i, txtValue, table, selectionMenu;
 	input = document.getElementById(inputId);
 	filter = input.value.toUpperCase();
 	table = document.getElementById(tableId);

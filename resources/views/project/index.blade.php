@@ -49,18 +49,24 @@
 		.table-view {
 			padding: 25px;
 			margin: 25px;
+			background-color: #edf3ff;
 		}
 	</style>
 
 
 
-	<div class="card table-view" id="table-all-projects">
-		<table class="table table-bordered table-sm" cellspacing="0" width="100%" id="projectsTable">
+	<div class="card table-view" id="cardview-all-projects">
+		<table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%" id="projectsTable">
           <thead >
            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>
+              	<input id="search-projectid" type="text" class="form-control form-control-sm" onkeyup="searchTableData(0, 'projectsTable', 'search-projectid')"></td>
+              <td>
+              	<input id="search-workorder" type="text" class="form-control form-control-sm" onkeyup="searchTableData(1, 'projectsTable', 'search-workorder')">
+              </td>
+              <td>
+          		<input id="search-project-name" type="text" class="form-control form-control-sm" onkeyup="searchTableData(2, 'projectsTable', 'search-project-name')">
+              </td>
               <td>
               	<div>
                   <select class="form-control-sm" id="status_select" style="width: 100%" onchange="filterBySelect('status_select', 'projectsTable', 3)">
@@ -72,9 +78,15 @@
                   </select>
                 </div>
               </td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>
+              	<input id="search-accountname" type="text" class="form-control form-control-sm" onkeyup="searchTableData(4, 'projectsTable', 'search-accountname')">
+              </td>
+              <td>
+              	<input id="search-accountnumber" type="text" class="form-control form-control-sm" onkeyup="searchTableData(5, 'projectsTable', 'search-accountnumber')">
+              </td>
+              <td>
+              	<input id="search-duedate" type="text" class="form-control form-control-sm" onkeyup="searchTableData(6, 'projectsTable', 'search-duedate')">
+              </td>
             </tr>
             <tr>
             	<th valign="middle" class="th-sm">Project ID</th>
@@ -93,20 +105,22 @@
 
           	<?php 
           		$statusName = $project->status;
+          		$pillColor = \App\StatusCode::where('name', $statusName)->first()->hex_color;
           		$datetime1 = new DateTime($project->due_date);
 				$datetime2 = new DateTime(today());
-				if ($datetime1 <= $datetime2) {
-					$hexColor = '#f94e4e';
-				} else {
-					$hexColor = \App\StatusCode::where('name', $statusName)->first()->hex_color; 
-				}
+				$isOverDue = ($datetime1 <= $datetime2 && $statusName != 'Completed');
+
           	?>
 
-          	<tr style="background-color: {{$hexColor}}">
+          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}} ">
           		<td>{{$project->id}}</td>
           		<td>{{$project->work_order}}</td>
           		<td>{{$project->name}}</td>
-          		<td>{{$statusName}}</td>
+          		<td style="text-align: center;">
+          			<div class="badge badge-pill " style="display: flex; justify-content: center; background-color: {{$pillColor}}; color: black; padding: 5px;">
+          				{{$statusName}}
+          			</div>
+          		</td>
           		<td>{{$project->account_name}}</td>
           		<td>{{$project->account_number}}</td>
           		<td>{{date_format(date_create($project->due_date), "m/d/Y")}}</td>
@@ -279,13 +293,13 @@
 			});
 
 			$('#btn-all-projects').on('click', function(event) {
-				$('#table-all-projects').css('display', "");
+				$('#cardview-all-projects').css('display', "");
 				$('#view-notes').css('display', "none");
 
 			});
 
 			$('#btn-project-notes').on('click', function(event) {
-				$('#table-all-projects').css('display', "none");
+				$('#cardview-all-projects').css('display', "none");
 				$('#view-notes').css('display', "");
 			});
 		});
