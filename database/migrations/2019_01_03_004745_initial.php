@@ -19,8 +19,8 @@ class Initial extends Migration
             $table->string('account_name');
             $table->string('account_number');
             $table->text('description');
-            $table->integer('status')->default(0);
-            $table->string('work_orders');
+            $table->string('status')->default('Not Started');
+            $table->string('work_order');
             $table->date('due_date');
             $table->timestamps();
         });

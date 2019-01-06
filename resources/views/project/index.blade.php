@@ -60,13 +60,15 @@
            <tr>
               <td></td>
               <td></td>
+              <td></td>
               <td>
-                <div>
-                  <select class="form-control-sm" id="status_select" style="width: 100%" onchange="filterBySelect('status_select', 'projectsTable', 2)">
+              	<div>
+                  <select class="form-control-sm" id="status_select" style="width: 100%" onchange="filterBySelect('status_select', 'projectsTable', 3)">
                     <option>All</option>
-                    <option>Not Started</option>
-                    <option>In Progress</option>
-                    <option>Complete</option>
+
+                    @foreach($status_codes as $code)
+                    	<option>{{$code->name}}</option>
+                    @endforeach
                   </select>
                 </div>
               </td>
@@ -75,27 +77,53 @@
               <td></td>
             </tr>
             <tr>
-              <th valign="middle">ID</th>
-              <th class="th-sm">Title</th>
-              <th class="th-sm">Status</th>
-              <th class="th-sm">Contents</th>
-              <th class="th-sm">Published</th>
-              <th class="th-sm">Last Updated</th>
+            	<th valign="middle" class="th-sm">Project ID</th>
+            	<th class="th-sm">Work Order</th>
+	            <th class="th-sm">Project Name</th>
+	            <th class="th-sm">Status</th>
+	            <th class="th-sm">Account</th>
+	            <th class="th-sm">Account Number</th>
+	            <th class="th-sm">Due Date</th>
             </tr>
 
             {{csrf_field()}}
           </thead>  
           <tbody>
+          	@foreach($projects as $project)
+
+          	<?php 
+          		$statusName = $project->status;
+          		$datetime1 = new DateTime($project->due_date);
+				$datetime2 = new DateTime(today());
+				if ($datetime1 <= $datetime2) {
+					$hexColor = '#f94e4e';
+				} else {
+					$hexColor = \App\StatusCode::where('name', $statusName)->first()->hex_color; 
+				}
+          	?>
+
+          	<tr style="background-color: {{$hexColor}}">
+          		<td>{{$project->id}}</td>
+          		<td>{{$project->work_order}}</td>
+          		<td>{{$project->name}}</td>
+          		<td>{{$statusName}}</td>
+          		<td>{{$project->account_name}}</td>
+          		<td>{{$project->account_number}}</td>
+          		<td>{{date_format(date_create($project->due_date), "m/d/Y")}}</td>
+          	</tr>
+
+          	@endforeach
           	
           </tbody>
           <tfoot>
             <tr>
-              <th valign="middle">ID</th>
-              <th class="th-sm">Title</th>
-              <th class="th-sm">Status</th>
-              <th class="th-sm">Contents</th>
-              <th class="th-sm">Published</th>
-              <th class="th-sm">Last Updated</th>
+            	<th class="th-sm">Project ID</th>
+            	<th class="th-sm">Work Order</th>
+	            <th class="th-sm">Project Name</th>
+	            <th class="th-sm">Status</th>
+	            <th class="th-sm">Account</th>
+	            <th class="th-sm">Account Number</th>
+	            <th class="th-sm">Due Date</th>
             </tr>
           </tfoot>
 		</table>
@@ -158,22 +186,22 @@
 				<div class="grid-container">
 					<div class="grid-item item1">
 						<label for="input-project-name">Project Name</label>
-						<input type="text" id="input-project-name" class="form-control">
+						<input type="text" id="input-project-name" class="form-control" maxlength="25">
 						<label for="input-account-name">Account Name</label>
-						<input type="text" id="input-account-name" class="form-control">
+						<input type="text" id="input-account-name" class="form-control" maxlength="25">
 						<label for="input-account-number">Account Number</label>
-						<input type="text" id="input-account-number" class="form-control">
+						<input type="text" id="input-account-number" class="form-control" maxlength="6">
 
 					</div>
 					<div class="grid-item item2">
 						<label for="input-project-status">Project Status</label>
 						<select class="form-control" id="input-project-status">
-		                    <option value="0">Not Started</option>
-		                    <option value="1">In Progress</option>
-		                    <option value="2">Complete</option>
+							@foreach($status_codes as $code)
+                    			<option>{{$code->name}}</option>
+                    		@endforeach
                   		</select>
 						<label for="input-workorder">Work Order</label>
-						<input type="text" id="input-workorder" class="form-control">
+						<input type="text" id="input-workorder" class="form-control" maxlength="6">
 						<label for="input-due-date">Due Date</label>
 						<input type="date" id="input-due-date" class="form-control">
 					</div>
@@ -201,6 +229,7 @@
 
 @section('javascript')
 
+	{{-- Create New Project --}}
 	<script>
 		$(document).ready(function() {
 			$('#btn-create-project').click(function(event) {
@@ -227,7 +256,7 @@
 						'account_number' : accountNumber,
 						'description' : projectDescription,
 						'status' : projectStatus,
-						'work_orders' : workOrder,
+						'work_order' : workOrder,
 						'due_date' : projectDueDate
 						
 					},

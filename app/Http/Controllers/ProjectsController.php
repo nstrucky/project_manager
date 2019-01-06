@@ -14,7 +14,14 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        return view('project.index');
+
+        $projects = \App\Project::all();
+        $status_codes = \App\StatusCode::all();
+
+        return view('project.index', [
+            'projects' => $projects,
+            'status_codes' => $status_codes
+        ]);
     }
 
     /**
@@ -40,9 +47,9 @@ class ProjectsController extends Controller
             'account_name' => 'required|min:3|max:255',
             'account_number' => 'required|min:1|max:6',
             'description' => 'required|min:3|max:500',
-            'work_orders' => 'required|unique:projects|min:1|max:6',
+            'work_order' => 'required|unique:projects|min:1|max:6',
             'due_date' => 'required',
-            'status' => 'required'
+            'status' => 'required|min:1|max:25'
 
         ]);
 
@@ -55,7 +62,7 @@ class ProjectsController extends Controller
             $account_name = $errors->first('account_name');
             $account_number = $errors->first('account_number');
             $description = $errors->first('description');
-            $work_orders = $errors->first('work_orders');
+            $work_order = $errors->first('work_order');
             $due_date = $errors->first('due_date');
             $status = $errors->first('status');
 
@@ -64,7 +71,7 @@ class ProjectsController extends Controller
                  'account_name' => $account_name,
                   'account_number' => $account_number,
                   'description' => $description,
-                  'work_orders' => $work_orders,
+                  'work_order' => $work_order,
                   'due_date' => $due_date,
                   'status' => $status
               ], 422);
@@ -74,7 +81,7 @@ class ProjectsController extends Controller
             $project->account_name = $request->account_name;
             $project->account_number = $request->account_number;
             $project->description = $request->description;
-            $project->work_orders = $request->work_orders;
+            $project->work_order = $request->work_order;
             $project->due_date = $request->due_date;
             $project->status = $request->status;
             $project->save();
