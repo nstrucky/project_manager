@@ -1,4 +1,4 @@
-@extends('baseview')
+@extends('layouts.baseview')
 
 
 @section('title', 'Tasks')
@@ -11,3 +11,4 @@
 @section('content')
 
 @endsection
+

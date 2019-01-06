@@ -12,7 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+        $projects = \App\Project::all();
+        $status_codes = \App\StatusCode::all();
+
+        return view('project.projects', [
+            'projects' => $projects,
+            'status_codes' => $status_codes
+        ]);
 });
 
 Route::resource('/projects', 'ProjectsController');

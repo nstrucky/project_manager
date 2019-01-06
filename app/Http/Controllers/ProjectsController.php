@@ -18,7 +18,7 @@ class ProjectsController extends Controller
         $projects = \App\Project::all();
         $status_codes = \App\StatusCode::all();
 
-        return view('project.index', [
+        return view('project.projects', [
             'projects' => $projects,
             'status_codes' => $status_codes
         ]);
@@ -94,10 +94,14 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(\App\Project $project)
     {
-        //
+        // $project = \App\Project::find($id);
+        return view('project.projectview', [
+            'project' => $project
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

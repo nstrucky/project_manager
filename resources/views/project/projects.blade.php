@@ -1,4 +1,4 @@
-@extends('baseview')
+@extends('layouts.baseview')
 
 @section('title', 'Projects')
 
@@ -8,55 +8,15 @@
 @section('button-settings-type', "btn-primary")
 
 @section('left-nav')
-
-	<div role="group" class="btn-group-vertical">
-		<button id="btn-create-project" type="button" class="btn btn-md btn-outline-default"><i class="fa fa-plus-circle mr-2"></i>New Project</button>
-		<button id="btn-all-projects" type="button" class="btn btn-md btn-outline-primary"><i class="fa fa-table mr-2"></i>All Projects</button>
-		<button id="btn-project-notes" type="button" class="btn btn-md btn-outline-primary"><i class="fa fa-pencil-square-o mr-2"></i>Notes</button>
-	</div>
-
+		<button id="btn-create-project" type="button" class="btn btn-md btn-outline-default btn-left-nav"><i class="fa fa-plus-circle mr-2"></i>New Project</button>
+		<button id="btn-all-projects" type="button" class="btn btn-md btn-outline-primary btn-left-nav"><i class="fa fa-table mr-2"></i>All Projects</button>
+		<button id="btn-project-notes" type="button" class="btn btn-md btn-outline-primary btn-left-nav"><i class="fa fa-pencil-square-o mr-2"></i>Notes</button>
 @endsection
 
 @section('content')
 
-	<style>
-		
-		      table.dataTable thead .sorting:after,
-      table.dataTable thead .sorting:before,
-      table.dataTable thead .sorting_asc:after,
-      table.dataTable thead .sorting_asc:before,
-      table.dataTable thead .sorting_asc_disabled:after,
-      table.dataTable thead .sorting_asc_disabled:before,
-      table.dataTable thead .sorting_desc:after,
-      table.dataTable thead .sorting_desc:before,
-      table.dataTable thead .sorting_desc_disabled:after,
-      table.dataTable thead .sorting_desc_disabled:before {
-         bottom: .5em;
-      }
-
-		.modal-header {
-			background-color: #164899;
-		}
-
-		.modal-title {
-			color: #e2e2e2;
-		}
-
-		.modal-footer {
-			background-color: #303030;
-		}
-
-		.table-view {
-			padding: 25px;
-			margin: 25px;
-			background-color: #edf3ff;
-		}
-	</style>
-
-
-
 	<div class="card table-view" id="cardview-all-projects">
-		<table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%" id="projectsTable">
+		<table class="table table-striped table-hover table-bordered table-sm" cellspacing="0" width="100%" id="projectsTable">
           <thead >
            <tr>
               <td>
@@ -115,7 +75,7 @@
           	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}} ">
           		<td>{{$project->id}}</td>
           		<td>{{$project->work_order}}</td>
-          		<td>{{$project->name}}</td>
+          		<td><a href="/projects/{{$project->id}}">{{$project->name}}</a></td>
           		<td style="text-align: center;">
           			<div class="badge badge-pill " style="display: flex; justify-content: center; background-color: {{$pillColor}}; color: black; padding: 5px;">
           				{{$statusName}}
@@ -149,43 +109,6 @@
 	</div>
 
 
-	<style>
-		.grid-container {
-			display: -ms-grid;
-			display: grid;
-			margin: 15px;
-			grid-gap: 10px;
-			-ms-grid-columns:2fr 1fr;
-		}
-
-		.grid-item {
-			padding: 10px;
-		}
-
-		.item1 {
-			grid-column: 1;
-			grid-row: 1;
-			-ms-grid-column: 1;
-			-ms-grid-row: 1;
-		}
-
-		.item2 {
-			grid-column: 2;
-			grid-row: 1;
-			-ms-grid-column: 2;
-			-ms-grid-row: 1;
-		}
-
-		.item3 {
-			grid-column: 1 / span 2;
-			grid-row: 2;
-			-ms-grid-column: 1;
-			-ms-grid-column-span: 2;
-			-ms-grid-row: 2;
-		}
-	</style>
-
-
 {{-- Modal New Project --}}
 <div class="modal fade" id="createProjectModal" role="modal">
 	<div class="modal-dialog modal-lg" >
@@ -197,8 +120,8 @@
 			</div>
 
 			<div class="modal-body">
-				<div class="grid-container">
-					<div class="grid-item item1">
+				<div class="create-modal-grid-container">
+					<div class="grid-item create-modal-item1">
 						<label for="input-project-name">Project Name</label>
 						<input type="text" id="input-project-name" class="form-control" maxlength="25">
 						<label for="input-account-name">Account Name</label>
@@ -207,7 +130,7 @@
 						<input type="text" id="input-account-number" class="form-control" maxlength="6">
 
 					</div>
-					<div class="grid-item item2">
+					<div class="grid-item create-modal-item2">
 						<label for="input-project-status">Project Status</label>
 						<select class="form-control" id="input-project-status">
 							@foreach($status_codes as $code)
@@ -220,7 +143,7 @@
 						<input type="date" id="input-due-date" class="form-control">
 					</div>
 
-					<div class="grid-item item3">
+					<div class="grid-item create-modal-item3">
 						<label for="input-description">Description</label>
 						<textarea id="input-description" class="textarea" rows="3" style="width: 100%"></textarea>
 					</div>
