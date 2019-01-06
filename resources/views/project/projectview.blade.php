@@ -16,6 +16,22 @@
 
 @section('content')
 
+	<div class="projectview-grid-container">
+
+		<div class="card fragment pv-summary">
+			test content
+		</div>
+
+		<div class="card fragment pv-notes-summary">
+			test content notes
+		</div>
+
+		<div class="card fragment pv-tasks-summary">
+			test content tasks
+		</div>
+		
+	</div>
+
 @endsection
 
 @section('javascript')

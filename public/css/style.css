@@ -1,3 +1,8 @@
+.card.fragment {
+	background-color: #edf3ff;
+	padding: 10px;
+}
+
 .top-nav {
 	float: top;
 	width: 100%;
@@ -76,29 +81,62 @@ table.dataTable thead .sorting_desc_disabled:before {
 	-ms-grid-columns:2fr 1fr;
 }
 
-.grid-item {
-	padding: 10px;
+	.grid-item {
+		padding: 10px;
+	}
+
+	.create-modal-item1 {
+		grid-column: 1;
+		grid-row: 1;
+		-ms-grid-column: 1;
+		-ms-grid-row: 1;
+	}
+
+	.create-modal-item2 {
+		grid-column: 2;
+		grid-row: 1;
+		-ms-grid-column: 2;
+		-ms-grid-row: 1;
+	}
+
+	.create-modal-item3 {
+		grid-column: 1 / span 2;
+		grid-row: 2;
+		-ms-grid-column: 1;
+		-ms-grid-column-span: 2;
+		-ms-grid-row: 2;
+	}
+
+.projectview-grid-container {
+	display: -ms-grid;
+	display: grid;
+	margin: 15px;
+	grid-gap: 10px;
+	-ms-grid-columns:2fr 1fr;
 }
 
-.create-modal-item1 {
-	grid-column: 1;
-	grid-row: 1;
-	-ms-grid-column: 1;
-	-ms-grid-row: 1;
-}
+	.pv-summary {
+		grid-column: 1 / span 3;
+		grid-row: 1;
+		-ms-grid-column: 1;
+		-ms-grid-column-span: 3;
+		-ms-grid-row: 1;
+	}
 
-.create-modal-item2 {
-	grid-column: 2;
-	grid-row: 1;
-	-ms-grid-column: 2;
-	-ms-grid-row: 1;
-}
+	.pv-notes-summary {
+		grid-column: 4 / span 2;
+		grid-row: 1 / span 2;
+		-ms-grid-column: 4;
+		-ms-grid-column-span: 2;
+		-ms-grid-row: 1;
+		-ms-grid-row-span: 2;
+	}
 
-.create-modal-item3 {
-	grid-column: 1 / span 2;
-	grid-row: 2;
-	-ms-grid-column: 1;
-	-ms-grid-column-span: 2;
-	-ms-grid-row: 2;
-}
+	.pv-tasks-summary {
+		grid-column: 1 / span 3;
+		grid-row: 2;
+		-ms-grid-column: 1;
+		-ms-grid-column-span: 3;
+		-ms-grid-row: 2;
+	}
 
