@@ -15,8 +15,8 @@
 
 @section('content')
 
-	<div class="card table-view" id="cardview-all-projects">
-		<table class="table table-striped table-hover table-bordered table-sm" cellspacing="0" width="100%" id="projectsTable">
+	<div class="card fragment" id="cardview-all-projects" style="margin: 25px;">
+		<table class="table table-striped table-bordered table-sm" cellspacing="0" width="75%" id="projectsTable">
           <thead >
            <tr>
               <td>

@@ -97,8 +97,13 @@ class ProjectsController extends Controller
     public function show(\App\Project $project)
     {
         // $project = \App\Project::find($id);
+
+        $notes = $project->notes;
+        $status_codes = \App\StatusCode::all();
         return view('project.projectview', [
-            'project' => $project
+            'project' => $project,
+            'notes' => $notes,
+            'status_codes' => $status_codes
         ]);
     }
 

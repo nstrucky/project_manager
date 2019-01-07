@@ -1,6 +1,7 @@
 .card.fragment {
-	background-color: #edf3ff;
-	padding: 10px;
+	padding: 25px;
+	margin: 5px;
+	background-color: #ffffff;
 }
 
 .top-nav {
@@ -78,7 +79,7 @@ table.dataTable thead .sorting_desc_disabled:before {
 	display: grid;
 	margin: 15px;
 	grid-gap: 10px;
-	-ms-grid-columns:2fr 1fr;
+	-ms-grid-columns: 1fr 1fr;
 }
 
 	.grid-item {
