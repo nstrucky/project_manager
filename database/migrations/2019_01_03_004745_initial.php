@@ -49,11 +49,12 @@ class Initial extends Migration
 
         Schema::create('tasks', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('status');
-            $table->boolean('complete');
+            $table->string('status');
+            $table->boolean('completed')->default(false);
             $table->string('title');
-            $table->date('due_date');
-            $table->dateTime('completed_on');
+            $table->date('start_date')->nullable();
+            $table->date('due_date')->nullable();
+            $table->dateTime('completed_on')->nullable();
             $table->integer('user_id');
             $table->integer('project_id');
             $table->integer('task_template_id');

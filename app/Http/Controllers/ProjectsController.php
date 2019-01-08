@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class ProjectsController extends Controller
 {
@@ -98,12 +99,21 @@ class ProjectsController extends Controller
     {
         // $project = \App\Project::find($id);
 
-        $notes = $project->notes;
+        $notes = DB::table('notes')
+                    ->orderBy('created_at', 'desc')
+                    ->where('project_id', '=', $project->id)
+                    ->get();
+
+
+
+
         $status_codes = \App\StatusCode::all();
+        $tasks = $project->tasks;
         return view('project.projectview', [
             'project' => $project,
             'notes' => $notes,
-            'status_codes' => $status_codes
+            'status_codes' => $status_codes,
+            'tasks' => $tasks
         ]);
     }
 

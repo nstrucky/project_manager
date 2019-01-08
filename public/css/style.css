@@ -1,3 +1,8 @@
+header {
+	border-bottom: 2px solid #cccccc;
+	margin-bottom: 5px;
+}
+
 .card.fragment {
 	padding: 25px;
 	margin: 5px;
@@ -140,4 +145,18 @@ table.dataTable thead .sorting_desc_disabled:before {
 		-ms-grid-column-span: 3;
 		-ms-grid-row: 2;
 	}
+
+.projectview-grid-container .subgrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 20px;
+	overflow: auto;
+}
+
+.notes-box {
+	word-wrap: normal;
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-top: 10px;
+}
 
