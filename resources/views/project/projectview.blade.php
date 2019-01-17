@@ -16,14 +16,7 @@
 
 @section('content')
 
-	<style>
-
-
-	</style>
-	
-
 	<div class="projectview-grid-container" id="view-dashboard">
-
 		<div class="card fragment pv-summary">
 			<header>
 				<font size="5">Summary</font>
@@ -39,9 +32,10 @@
 				</div>
 				<div>
 					<label for="input-project-status">Project Status</label>
-					<select class="form-control" id="input-project-status" disabled="" value="{{$project->status}}">
+					<select class="form-control" id="input-project-status" disabled="">
 						@foreach($status_codes as $code)
-	            			<option>{{$code->name}}</option>
+							<?php $selected = strcmp($project->status,$code->name) == 0; ?>
+							<option {{$selected ? 'selected' : ''}}>{{$code->name}}</option>
 	            		@endforeach
 	          		</select>
 					<label for="input-workorder">Work Order</label>
@@ -79,11 +73,6 @@
 					
 			@endforeach
 		</div>
-
-		<style>
-
-
-		</style>
 
 		<div class="card fragment pv-tasks-summary">
 			<header>

@@ -13,10 +13,19 @@ insert into tasks(status, completed, title, start_date, due_date, user_id, proje
 			('In Progress', 0, 'Task 3', '2019-02-06', '2019-02-07', 1, 1, 1),
 			('In Progress', 0, 'Task 4', '2019-01-01', '2019-01-03', 1, 1, 1);
 
-
+--users
 insert into users(first_name, last_name, job_title) 
 	values ('Nick', 'Struckmeyer', 'PM'), 
 			('Jeff', 'Girolimon', 'Engineer'),
 			('Liz', 'Heinrich', 'Engineer');
 
 
+--projects
+insert into projects(name, account_name, account_number, description, status, work_order, due_date) 
+	values ('ADT at Las Palmas', 'Las Palmas HCA', '111111', 'this is just an ADT project', 'In Progress', '123456', '2019-01-29'),
+		('Vocera at SJPV', 'St Johns Pleasant V', '222222', 'Some wireless at sjpv', 'Not Started', '234567', '2019-05-05'),
+		('Spectralink at Mattawa', 'Mattawa General', '333333', 'Spectralink or something at this place', 'Impl Complete', '345678', '2019-06-05'),
+		('OBD at Riverside', 'Riverside University', '444444', 'Outbound bed data at this place', 'Not Started', '456789', '2019-01-01'),
+		('Falls Risk at Oreo', 'Oreo University', '555555', 'Falls Risk stuff at Cookie palace', 'In Progress', '567891', '2019-02-06'),
+		('AD Integration', 'MH Cypress', '666666', 'This place is a real joy to work with', 'Completed', '678912', '2019-01-20'),
+		('Finale at Final', 'Finale Institute', '777777', 'Finally done with everything jesus', 'Completed', '789123', '2019-01-03');	
