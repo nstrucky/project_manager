@@ -24,3 +24,4 @@ Route::get('/', function () {
 Route::resource('/projects', 'ProjectsController');
 Route::resource('/tasks', 'TasksController');
 Route::resource('/notes', 'NotesController');
+Route::get('/projects/{project}/notes', 'NotesController@projectNotes');

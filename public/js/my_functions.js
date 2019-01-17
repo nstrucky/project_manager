@@ -45,4 +45,9 @@ function filterBySelect(selectorId, tableId, columnIndex) {
 			}
 		}
 	}
+
+
+	function retrieveNotes(projectId) {
+		toastr.success('Project: ' + projectId, 'Success', {timeOut: 50000} );
+	}
 }

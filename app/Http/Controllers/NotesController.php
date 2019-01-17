@@ -81,4 +81,9 @@ class NotesController extends Controller
     {
         //
     }
+
+    public function projectNotes(\App\Project $project) {
+        $notes = $project->notes;
+        return response()->json($notes);
+    }
 }

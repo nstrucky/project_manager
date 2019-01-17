@@ -118,6 +118,8 @@
 			.split-notes-notes {
 				grid-column: 2;
 				grid-row: 1;
+				overflow-y: auto;
+				max-height: 550px;
 			}
 
 	</style>
@@ -150,7 +152,7 @@
 						$isOverDue = ($datetime1 <= $datetime2 && $statusName != 'Completed');
 		          	?>
 
-		          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}} ">
+		          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}}" onclick="retrieveNotes({{$project->id}})">
 		          		<td>{{$project->id}}</td>
 		          		<td><a href="/projects/{{$project->id}}">{{$project->name}}</a></td>
 		          		<td style="text-align: center;">
@@ -168,8 +170,8 @@
 				</table>
 			</div>
 
-			<div class="card fragment split-notes-notes">
-				
+			<div id="fragment-split-notes" class="card fragment split-notes-notes">
+				<header><font size="5">Notes</font></header>
 			</div>			
 		</div>
 	</div>
@@ -316,6 +318,55 @@
         });
         $('.dataTables_length').addClass('bs-select');
       });
+    </script>
+
+
+    {{-- Retrieving Notes --}}
+    <script>
+    	function retrieveNotes(projectId) {
+
+
+    		$(document).ready(function() {
+    			$.ajax({
+    				type: 'GET',
+    				url: '/projects/' + projectId + '/notes',
+
+    				success: function(json) {
+
+    					$('#fragment-split-notes').empty();
+    					$('<header><font size="5">Notes</font></header>').appendTo('#fragment-split-notes');
+
+    					for (i in json) {
+    						console.log('PM-PM: ' + json[i].content);
+
+    						var toAppend = 
+    						'<div>' +
+								'<p class="notes-box">' + json[i].content + '</p>' +
+								'<footer style="border-bottom: 1px solid #cccccc;">' +
+									'<font size="2" style="margin-left: 10px;">some date</font>' +
+								'</footer>' +
+							'</div>';
+
+							$(toAppend).appendTo('#fragment-split-notes');
+    					}
+
+    					
+
+		
+
+					
+
+    				}, 
+    				error: function(data) {
+    					toastr.error(data.statusText, 'Error', {timeOut: 5000});
+    				}
+    			});
+    		});
+
+
+
+    		// toastr.success('Pushed ' + projectId, 'Success', {timeOut: 5000});
+		}
     </script>
 
 
