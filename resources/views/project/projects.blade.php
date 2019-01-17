@@ -69,7 +69,6 @@
           		$datetime1 = new DateTime($project->due_date);
 				$datetime2 = new DateTime(today());
 				$isOverDue = ($datetime1 <= $datetime2 && $statusName != 'Completed');
-
           	?>
 
           	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}} ">
@@ -104,8 +103,75 @@
 	</div>
 
 
-	<div style="color: white; display: none" id="view-notes">
-		Test notes
+	<style>
+		.main-split-notes-view {
+			display: grid;
+			margin: 15px;
+			grid-gap: 8px;
+			grid-template-columns: 1fr 1fr;
+		}
+			.split-notes-table {
+				grid-column: 1;
+				grid-row: 1;
+			}
+
+			.split-notes-notes {
+				grid-column: 2;
+				grid-row: 1;
+			}
+
+	</style>
+
+
+	<div style="display: none" id="view-notes">
+		
+		<div class="main-split-notes-view">
+			<div class="card fragment split-notes-table">
+				<table class="table table-hover table-bordered table-sm" cellspacing="0" width=100%" id="projectsTableNotes">
+		          <thead >
+		            <tr>
+		            	<th class="th-sm">Project ID</th>
+			            <th class="th-sm" id="project-name-header-notes">Project Name</th>
+			            <th class="th-sm" id="status-header-notes">Status</th>
+			            <th class="th-sm">Account</th>
+			            <th class="th-sm">Due Date</th>
+		            </tr>
+
+		            {{csrf_field()}}
+		          </thead>  
+		          <tbody>
+		          	@foreach($projects as $project)
+
+		          	<?php 
+		          		$statusName = $project->status;
+		          		$pillColor = \App\StatusCode::where('name', $statusName)->first()->hex_color;
+		          		$datetime1 = new DateTime($project->due_date);
+						$datetime2 = new DateTime(today());
+						$isOverDue = ($datetime1 <= $datetime2 && $statusName != 'Completed');
+		          	?>
+
+		          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}} ">
+		          		<td>{{$project->id}}</td>
+		          		<td><a href="/projects/{{$project->id}}">{{$project->name}}</a></td>
+		          		<td style="text-align: center;">
+		          			<div class="badge badge-pill " style="display: flex; justify-content: center; background-color: {{$pillColor}}; color: black; padding: 5px;">
+		          				{{$statusName}}
+		          			</div>
+		          		</td>
+		          		<td>{{$project->account_name}}</td>
+		          		<td>{{date_format(date_create($project->due_date), "m/d/Y")}}</td>
+		          	</tr>
+
+		          	@endforeach
+		          	
+		          </tbody>
+				</table>
+			</div>
+
+			<div class="card fragment split-notes-notes">
+				
+			</div>			
+		</div>
 	</div>
 
 
@@ -224,6 +290,7 @@
 			$('#btn-project-notes').on('click', function(event) {
 				$('#cardview-all-projects').css('display', "none");
 				$('#view-notes').css('display', "");
+				$('#project-name-header-notes').click(); //hacky way to solve detached header issue, but it does sort too
 			});
 		});
 	</script>
@@ -238,5 +305,18 @@
         $('.dataTables_length').addClass('bs-select');
       });
     </script>
+
+
+        {{-- Format Notes Table --}}
+    <script>
+      $(document).ready(function () {
+        $('#projectsTableNotes').DataTable({
+          "scrollY": "300px",
+          // "scrollCollapse": true
+        });
+        $('.dataTables_length').addClass('bs-select');
+      });
+    </script>
+
 
 @endsection

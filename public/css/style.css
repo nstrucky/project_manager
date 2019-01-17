@@ -117,7 +117,7 @@ table.dataTable thead .sorting_desc_disabled:before {
 	display: -ms-grid;
 	display: grid;
 	margin: 15px;
-	grid-gap: 10px;
+	grid-gap: 8px;
 	-ms-grid-columns:2fr 1fr;
 	grid-template-columns: 3fr 2fr;
 }
