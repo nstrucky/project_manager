@@ -11,17 +11,23 @@
 |
 */
 
-Route::get('/', function () {
-        $projects = \App\Project::all();
-        $status_codes = \App\StatusCode::all();
+// Route::get('/', function () {
+//         $projects = \App\Project::all();
+//         $status_codes = \App\StatusCode::all();
 
-        return view('project.projects', [
-            'projects' => $projects,
-            'status_codes' => $status_codes
-        ]);
-});
+//         return view('project.projects', [
+//             'projects' => $projects,
+//             'status_codes' => $status_codes
+//         ]);
+// });
 
-Route::resource('/projects', 'ProjectsController');
-Route::resource('/tasks', 'TasksController');
-Route::resource('/notes', 'NotesController');
-Route::get('/projects/{project}/notes', 'NotesController@projectNotes');
+// Route::get('/', 'PagesController@home');
+Route::resource('/projects', 'ProjectsController')->middleware('auth');
+Route::resource('/tasks', 'TasksController')->middleware('auth');
+Route::resource('/notes', 'NotesController')->middleware('auth');
+Route::get('/projects/{project}/notes', 'NotesController@projectNotes')->middleware('auth');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index');

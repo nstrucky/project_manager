@@ -1,11 +1,4 @@
-@extends('layouts.baseview')
-
-@section('title', $project->name)
-
-@section('button-projects-type', "btn-dark")
-@section('button-tasks-type', "btn-primary")
-@section('button-users-type', "btn-primary")
-@section('button-settings-type', "btn-primary")
+@extends('layouts.app')
 
 @section('left-nav')
 		<form action="/projects" method="GET"><button id="btn-all-projects" type="submit" class="btn btn-md btn-outline-primary btn-left-nav"><i class="fa fa-table mr-2"></i>All Projects</button></form>
@@ -17,11 +10,11 @@
 @section('content')
 
 	<div class="projectview-grid-container" id="view-dashboard">
-		<div class="card fragment pv-summary">
-			<header>
-				<font size="5">Summary</font>
+		<div class="card pv-summary">
+			<header class="card-header">
+				<font>Summary</font>
 			</header>
-			<div class="subgrid" >
+			<div class="subgrid card-body" >
 
 				<div>
 					<label for="input-project-name">Project Name</label>
@@ -58,12 +51,13 @@
 			</div>
 		</div>
 
-		<div class="card fragment pv-notes-summary" style="word-wrap: normal; overflow: auto;">
-			<header style="display: flex; justify-content: space-between;">
-				<font size="5">Notes</font>
-				<button class="btn btn-success"><i class="fa fa-plus mr-2"></i>Add Note</button>
+		<div class="card pv-notes-summary" style="word-wrap: normal; overflow: auto;">
+			<header class="card-header">
+				<font>Notes</font>
+				
 			</header>
-			<div style="overflow-y: auto; max-height: 800px;">
+			<button class="btn btn-success btn-sm"><i class="fa fa-plus mr-2"></i>Add Note</button>
+			<div class="card-body" style="overflow-y: auto; max-height: 800px;">
 
 				@foreach($notes as $note)
 				<div>
@@ -79,11 +73,12 @@
 
 		</div>
 
-		<div class="card fragment pv-tasks-summary">
-			<header>
-				<font size="5">Tasks</font>
+		<div class="card pv-tasks-summary">
+			<header class="card-header">
+				<font>Tasks</font>
 			</header>
-			<table class="table table-striped table-bordered table-sm" id="tasksTable" style="width: 100%">
+			<div class="card-body">
+				<table class="table table-striped table-bordered table-sm" id="tasksTable" style="width: 100%">
 				<thead>
 					<tr>
 						<th>Completed</th>
@@ -119,6 +114,8 @@
 					
 				</tbody>
 			</table>
+			</div>
+			
 		</div>
 		
 	</div>

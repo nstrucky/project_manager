@@ -1,11 +1,6 @@
-@extends('layouts.baseview')
+@extends('layouts.app')
 
-@section('title', 'Projects')
-
-@section('button-projects-type', "btn-dark")
-@section('button-tasks-type', "btn-primary")
-@section('button-users-type', "btn-primary")
-@section('button-settings-type', "btn-primary")
+{{-- @section('title', 'Projects') --}}
 
 @section('left-nav')
 		<button id="btn-create-project" type="button" class="btn btn-md btn-outline-default btn-left-nav"><i class="fa fa-plus-circle mr-2"></i>New Project</button>
@@ -15,91 +10,95 @@
 
 @section('content')
 
-	<div class="card fragment" id="cardview-all-projects" style="margin: 25px;">
-		<table class="table table-striped table-bordered table-sm" cellspacing="0" width="75%" id="projectsTable">
-          <thead >
-           <tr>
-              <td>
-              	<input id="search-projectid" type="text" class="form-control form-control-sm" onkeyup="searchTableData(0, 'projectsTable', 'search-projectid')"></td>
-              <td>
-              	<input id="search-workorder" type="text" class="form-control form-control-sm" onkeyup="searchTableData(1, 'projectsTable', 'search-workorder')">
-              </td>
-              <td>
-          		<input id="search-project-name" type="text" class="form-control form-control-sm" onkeyup="searchTableData(2, 'projectsTable', 'search-project-name')">
-              </td>
-              <td>
-              	<div>
-                  <select class="form-control-sm" id="status_select" style="width: 100%" onchange="filterBySelect('status_select', 'projectsTable', 3)">
-                    <option>All</option>
+	<div class="card" id="cardview-all-projects" style="margin: 25px;">
+		<header class="card-header">Projects</header>
+		<div class="card-body">
+			<table class="table table-striped table-bordered table-sm" cellspacing="0" width="75%" id="projectsTable">
+	          <thead >
+	           <tr>
+	              <td>
+	              	<input id="search-projectid" type="text" class="form-control form-control-sm" onkeyup="searchTableData(0, 'projectsTable', 'search-projectid')"></td>
+	              <td>
+	              	<input id="search-workorder" type="text" class="form-control form-control-sm" onkeyup="searchTableData(1, 'projectsTable', 'search-workorder')">
+	              </td>
+	              <td>
+	          		<input id="search-project-name" type="text" class="form-control form-control-sm" onkeyup="searchTableData(2, 'projectsTable', 'search-project-name')">
+	              </td>
+	              <td>
+	              	<div>
+	                  <select class="form-control-sm" id="status_select" style="width: 100%" onchange="filterBySelect('status_select', 'projectsTable', 3)">
+	                    <option>All</option>
 
-                    @foreach($status_codes as $code)
-                    	<option>{{$code->name}}</option>
-                    @endforeach
-                  </select>
-                </div>
-              </td>
-              <td>
-              	<input id="search-accountname" type="text" class="form-control form-control-sm" onkeyup="searchTableData(4, 'projectsTable', 'search-accountname')">
-              </td>
-              <td>
-              	<input id="search-accountnumber" type="text" class="form-control form-control-sm" onkeyup="searchTableData(5, 'projectsTable', 'search-accountnumber')">
-              </td>
-              <td>
-              	<input id="search-duedate" type="text" class="form-control form-control-sm" onkeyup="searchTableData(6, 'projectsTable', 'search-duedate')">
-              </td>
-            </tr>
-            <tr>
-            	<th valign="middle" class="th-sm">Project ID</th>
-            	<th class="th-sm">Work Order</th>
-	            <th class="th-sm">Project Name</th>
-	            <th class="th-sm">Status</th>
-	            <th class="th-sm">Account</th>
-	            <th class="th-sm">Account Number</th>
-	            <th class="th-sm">Due Date</th>
-            </tr>
+	                    @foreach($status_codes as $code)
+	                    	<option>{{$code->name}}</option>
+	                    @endforeach
+	                  </select>
+	                </div>
+	              </td>
+	              <td>
+	              	<input id="search-accountname" type="text" class="form-control form-control-sm" onkeyup="searchTableData(4, 'projectsTable', 'search-accountname')">
+	              </td>
+	              <td>
+	              	<input id="search-accountnumber" type="text" class="form-control form-control-sm" onkeyup="searchTableData(5, 'projectsTable', 'search-accountnumber')">
+	              </td>
+	              <td>
+	              	<input id="search-duedate" type="text" class="form-control form-control-sm" onkeyup="searchTableData(6, 'projectsTable', 'search-duedate')">
+	              </td>
+	            </tr>
+	            <tr>
+	            	<th valign="middle" class="th-sm">Project ID</th>
+	            	<th class="th-sm">Work Order</th>
+		            <th class="th-sm">Project Name</th>
+		            <th class="th-sm">Status</th>
+		            <th class="th-sm">Account</th>
+		            <th class="th-sm">Account Number</th>
+		            <th class="th-sm">Due Date</th>
+	            </tr>
 
-            {{csrf_field()}}
-          </thead>  
-          <tbody>
-          	@foreach($projects as $project)
+	            {{csrf_field()}}
+	          </thead>  
+	          <tbody>
+	          	@foreach($projects as $project)
 
-          	<?php 
-          		$statusName = $project->status;
-          		$pillColor = \App\StatusCode::where('name', $statusName)->first()->hex_color;
-          		$datetime1 = new DateTime($project->due_date);
-				$datetime2 = new DateTime(today());
-				$isOverDue = ($datetime1 <= $datetime2 && $statusName != 'Completed');
-          	?>
+	          	<?php 
+	          		$statusName = $project->status;
+	          		$pillColor = \App\StatusCode::where('name', $statusName)->first()->hex_color;
+	          		$datetime1 = new DateTime($project->due_date);
+					$datetime2 = new DateTime(today());
+					$isOverDue = ($datetime1 <= $datetime2 && $statusName != 'Completed');
+	          	?>
 
-          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}} ">
-          		<td>{{$project->id}}</td>
-          		<td>{{$project->work_order}}</td>
-          		<td><a href="/projects/{{$project->id}}">{{$project->name}}</a></td>
-          		<td style="text-align: center;">
-          			<div class="badge badge-pill " style="display: flex; justify-content: center; background-color: {{$pillColor}}; color: black; padding: 5px;">
-          				{{$statusName}}
-          			</div>
-          		</td>
-          		<td>{{$project->account_name}}</td>
-          		<td>{{$project->account_number}}</td>
-          		<td>{{date_format(date_create($project->due_date), "m/d/Y")}}</td>
-          	</tr>
+	          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}} ">
+	          		<td>{{$project->id}}</td>
+	          		<td>{{$project->work_order}}</td>
+	          		<td><a href="/projects/{{$project->id}}">{{$project->name}}</a></td>
+	          		<td style="text-align: center;">
+	          			<div class="badge badge-pill " style="display: flex; justify-content: center; background-color: {{$pillColor}}; color: black; padding: 5px;">
+	          				{{$statusName}}
+	          			</div>
+	          		</td>
+	          		<td>{{$project->account_name}}</td>
+	          		<td>{{$project->account_number}}</td>
+	          		<td>{{date_format(date_create($project->due_date), "m/d/Y")}}</td>
+	          	</tr>
 
-          	@endforeach
-          	
-          </tbody>
-          <tfoot>
-            <tr>
-            	<th class="th-sm">Project ID</th>
-            	<th class="th-sm">Work Order</th>
-	            <th class="th-sm">Project Name</th>
-	            <th class="th-sm">Status</th>
-	            <th class="th-sm">Account</th>
-	            <th class="th-sm">Account Number</th>
-	            <th class="th-sm">Due Date</th>
-            </tr>
-          </tfoot>
-		</table>
+	          	@endforeach
+	          	
+	          </tbody>
+	          <tfoot>
+	            <tr>
+	            	<th class="th-sm">Project ID</th>
+	            	<th class="th-sm">Work Order</th>
+		            <th class="th-sm">Project Name</th>
+		            <th class="th-sm">Status</th>
+		            <th class="th-sm">Account</th>
+		            <th class="th-sm">Account Number</th>
+		            <th class="th-sm">Due Date</th>
+	            </tr>
+	          </tfoot>
+			</table>
+		</div>
+		
 	</div>
 
 
@@ -124,58 +123,63 @@
 	</style>
 
 
-	<div style="display: none" id="view-notes">
+	<div style="display: none; margin-top: 25px;" id="view-notes">
 		
 		<div class="main-split-notes-view">
-			<div class="card fragment split-notes-table">
-				<table class="table table-hover table-bordered table-sm" cellspacing="0" width=100%" id="projectsTableNotes">
-		          <thead >
-		            <tr>
-		            	<th class="th-sm">Project ID</th>
-			            <th class="th-sm" id="project-name-header-notes">Project Name</th>
-			            <th class="th-sm" id="status-header-notes">Status</th>
-			            <th class="th-sm">Account</th>
-			            <th class="th-sm">Due Date</th>
-		            </tr>
+			<div class="card split-notes-table">
+				<header class="card-header">Projects</header>
+				<div class="card-body">
+					<table class="table table-hover table-bordered table-sm" cellspacing="0" width=100%" id="projectsTableNotes">
+			          <thead >
+			            <tr>
+			            	<th class="th-sm">Project ID</th>
+				            <th class="th-sm" id="project-name-header-notes">Project Name</th>
+				            <th class="th-sm" id="status-header-notes">Status</th>
+				            <th class="th-sm">Account</th>
+				            <th class="th-sm">Due Date</th>
+			            </tr>
 
-		            {{csrf_field()}}
-		          </thead>  
-		          <tbody>
-		          	@foreach($projects as $project)
+			            {{csrf_field()}}
+			          </thead>  
+			          <tbody>
+			          	@foreach($projects as $project)
 
-		          	<?php 
-		          		$statusName = $project->status;
-		          		$pillColor = \App\StatusCode::where('name', $statusName)->first()->hex_color;
-		          		$datetime1 = new DateTime($project->due_date);
-						$datetime2 = new DateTime(today());
-						$isOverDue = ($datetime1 <= $datetime2 && $statusName != 'Completed');
-		          	?>
+			          	<?php 
+			          		$statusName = $project->status;
+			          		$pillColor = \App\StatusCode::where('name', $statusName)->first()->hex_color;
+			          		$datetime1 = new DateTime($project->due_date);
+							$datetime2 = new DateTime(today());
+							$isOverDue = ($datetime1 <= $datetime2 && $statusName != 'Completed');
+			          	?>
 
-		          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}}" onclick="retrieveNotes({{$project->id}}, '{{$project->name}}')">
-		          		<td>{{$project->id}}</td>
-		          		<td><a href="/projects/{{$project->id}}">{{$project->name}}</a></td>
-		          		<td style="text-align: center;">
-		          			<div class="badge badge-pill " style="display: flex; justify-content: center; background-color: {{$pillColor}}; color: black; padding: 5px;">
-		          				{{$statusName}}
-		          			</div>
-		          		</td>
-		          		<td>{{$project->account_name}}</td>
-		          		<td>{{date_format(date_create($project->due_date), "m/d/Y")}}</td>
-		          	</tr>
+			          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}}" onclick="retrieveNotes({{$project->id}}, '{{$project->name}}')">
+			          		<td>{{$project->id}}</td>
+			          		<td><a href="/projects/{{$project->id}}">{{$project->name}}</a></td>
+			          		<td style="text-align: center;">
+			          			<div class="badge badge-pill " style="display: flex; justify-content: center; background-color: {{$pillColor}}; color: black; padding: 5px;">
+			          				{{$statusName}}
+			          			</div>
+			          		</td>
+			          		<td>{{$project->account_name}}</td>
+			          		<td>{{date_format(date_create($project->due_date), "m/d/Y")}}</td>
+			          	</tr>
 
-		          	@endforeach
-		          	
-		          </tbody>
-				</table>
+			          	@endforeach
+			          	
+			          </tbody>
+					</table>
+				</div>
+
 			</div>
 
-			<div id="fragment-split-notes" class="card fragment split-notes-notes">
-				<header>
-					<font id="title-notes" size="5">Notes</font>
-					<button class="btn btn-success"><i class="fa fa-plus mr-2"></i>Add Note</button>
+			<div id="fragment-split-notes" class="card split-notes-notes">
+				<header class="card-header">
+					<font id="title-notes">Notes</font>
+					
 				</header>
+				<button class="btn btn-success btn-sm"><i class="fa fa-plus mr-2"></i>Add Note</button>
 
-				<div id="section-notes" style="overflow-y: auto; max-height: 500px;">
+				<div id="section-notes" class="card-body" style="overflow-y: auto; max-height: 450px;">
 					
 				</div>
 			</div>			
@@ -189,9 +193,9 @@
 
 		{{-- Modal Content --}}
 		<div class="modal-content">
-			<div class="modal-header">
+			<header class="card-header">
 				<h4 class="modal-title">Create New Project</h4>
-			</div>
+			</header>
 
 			<div class="modal-body">
 				<div class="create-modal-grid-container">
@@ -224,10 +228,10 @@
 				</div>
 			</div>
 
-			<div class="modal-footer">
-				<button id="btn-save-project" class="btn btn-md btn-outline-success"><i></i>Save</button>
-				<button id="btn-cancel" data-dismiss="modal" class="btn btn-md btn-outline-warning"><i></i>Cancel</button>
-			</div>
+			<footer class="card-footer">
+				<button style="float: right; width: 100px;" id="btn-save-project" class="btn btn-md btn-success"><i></i>Save</button>
+				<button style="float: right; width: 100px;" id="btn-cancel" data-dismiss="modal" class="btn btn-md btn-warning"><i></i>Cancel</button>
+			</footer>
 		</div>
 		
 	</div>

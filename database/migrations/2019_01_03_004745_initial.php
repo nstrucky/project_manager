@@ -27,9 +27,13 @@ class Initial extends Migration
 
         Schema::create('users', function(Blueprint $table) {
             $table->increments('id');
+            $table->string('username');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('job_title');
+            $table->string('email');
+            $table->string('user_role');
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
         });
 
@@ -56,9 +60,12 @@ class Initial extends Migration
             $table->date('due_date')->nullable();
             $table->dateTime('completed_on')->nullable();
             $table->integer('user_id');
-            $table->integer('project_id');
+            $table->unsignedInteger('project_id');
             $table->integer('task_template_id');
             $table->timestamps();
+
+
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
 
         Schema::create('status_codes', function(Blueprint $table) {
