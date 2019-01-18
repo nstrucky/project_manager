@@ -59,19 +59,24 @@
 		</div>
 
 		<div class="card fragment pv-notes-summary" style="word-wrap: normal; overflow: auto;">
-			<header>
+			<header style="display: flex; justify-content: space-between;">
 				<font size="5">Notes</font>
+				<button class="btn btn-success"><i class="fa fa-plus mr-2"></i>Add Note</button>
 			</header>
-			@foreach($notes as $note)
-			<div>
-				<p class="notes-box">{{$note->content}}</p>
-				<footer style="border-bottom: 1px solid #cccccc;">
-					<font size="2" style="margin-left: 10px;">{{date_format(new DateTime($note->created_at), 'm/d/Y H:m:s')}}</font>
-				</footer>
-				
-			</div>
+			<div style="overflow-y: auto; max-height: 800px;">
+
+				@foreach($notes as $note)
+				<div>
+					<p class="notes-box">{{$note->content}}</p>
+					<footer style="border-bottom: 1px solid #cccccc;">
+						<font size="2" style="margin-left: 10px;">{{date_format(new DateTime($note->created_at), 'm/d/Y H:m:s')}}</font>
+					</footer>
 					
-			@endforeach
+				</div>
+						
+				@endforeach				
+			</div>
+
 		</div>
 
 		<div class="card fragment pv-tasks-summary">

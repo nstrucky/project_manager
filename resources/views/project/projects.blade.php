@@ -118,8 +118,7 @@
 			.split-notes-notes {
 				grid-column: 2;
 				grid-row: 1;
-				overflow-y: auto;
-				max-height: 550px;
+				max-height: 625px;
 			}
 
 	</style>
@@ -152,7 +151,7 @@
 						$isOverDue = ($datetime1 <= $datetime2 && $statusName != 'Completed');
 		          	?>
 
-		          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}}" onclick="retrieveNotes({{$project->id}})">
+		          	<tr style="{{$isOverDue ? 'background-color: #f29d9d' : ''}}" onclick="retrieveNotes({{$project->id}}, '{{$project->name}}')">
 		          		<td>{{$project->id}}</td>
 		          		<td><a href="/projects/{{$project->id}}">{{$project->name}}</a></td>
 		          		<td style="text-align: center;">
@@ -171,7 +170,14 @@
 			</div>
 
 			<div id="fragment-split-notes" class="card fragment split-notes-notes">
-				<header><font size="5">Notes</font></header>
+				<header>
+					<font id="title-notes" size="5">Notes</font>
+					<button class="btn btn-success"><i class="fa fa-plus mr-2"></i>Add Note</button>
+				</header>
+
+				<div id="section-notes" style="overflow-y: auto; max-height: 500px;">
+					
+				</div>
 			</div>			
 		</div>
 	</div>
@@ -320,54 +326,6 @@
       });
     </script>
 
-
-    {{-- Retrieving Notes --}}
-    <script>
-    	function retrieveNotes(projectId) {
-
-
-    		$(document).ready(function() {
-    			$.ajax({
-    				type: 'GET',
-    				url: '/projects/' + projectId + '/notes',
-
-    				success: function(json) {
-
-    					$('#fragment-split-notes').empty();
-    					$('<header><font size="5">Notes</font></header>').appendTo('#fragment-split-notes');
-
-    					for (i in json) {
-    						console.log('PM-PM: ' + json[i].content);
-
-    						var toAppend = 
-    						'<div>' +
-								'<p class="notes-box">' + json[i].content + '</p>' +
-								'<footer style="border-bottom: 1px solid #cccccc;">' +
-									'<font size="2" style="margin-left: 10px;">some date</font>' +
-								'</footer>' +
-							'</div>';
-
-							$(toAppend).appendTo('#fragment-split-notes');
-    					}
-
-    					
-
-		
-
-					
-
-    				}, 
-    				error: function(data) {
-    					toastr.error(data.statusText, 'Error', {timeOut: 5000});
-    				}
-    			});
-    		});
-
-
-
-    		// toastr.success('Pushed ' + projectId, 'Success', {timeOut: 5000});
-		}
-    </script>
 
 
 @endsection

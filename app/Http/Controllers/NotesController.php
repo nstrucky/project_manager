@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NotesController extends Controller
 {
@@ -82,8 +83,13 @@ class NotesController extends Controller
         //
     }
 
-    public function projectNotes(\App\Project $project) {
-        $notes = $project->notes;
+    public function projectNotes($id) {
+
+        $notes = DB::table('notes')
+                    ->where('project_id', $id)
+                    ->orderby('created_at', 'desc')
+                    ->get();
+
         return response()->json($notes);
     }
 }

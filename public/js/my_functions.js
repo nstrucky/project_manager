@@ -45,9 +45,38 @@ function filterBySelect(selectorId, tableId, columnIndex) {
 			}
 		}
 	}
-
-
-	function retrieveNotes(projectId) {
-		toastr.success('Project: ' + projectId, 'Success', {timeOut: 50000} );
-	}
 }
+
+
+/*
+ * Retrieves notes by project ID
+ */
+function retrieveNotes(projectId, projectName) {
+	$(document).ready(function() {
+		$.ajax({
+			type: 'GET',
+			url: '/projects/' + projectId + '/notes',
+			success: function(json) {
+				document.getElementById('title-notes').innerHTML = projectName;
+				$('#section-notes').empty();
+				for (i in json) {
+					var options = {day: '2-digit', year: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'};
+					var noteDate = (new Date(json[i].created_at)).toLocaleDateString("en-US", options);
+					var toAppend = 
+					'<div>' +
+						'<p class="notes-box">' + json[i].content + '</p>' +
+						'<footer style="border-bottom: 1px solid #cccccc;">' +
+							'<font size="2" style="margin-left: 10px;">'+ noteDate + '</font>' +
+						'</footer>' +
+					'</div>';
+
+					$(toAppend).appendTo('#section-notes');
+				}
+			}, 
+			error: function(data) {
+				toastr.error(data.statusText, 'Error', {timeOut: 5000});
+			}
+		});
+	});
+}
+
