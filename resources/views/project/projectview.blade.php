@@ -63,7 +63,11 @@
 				<div>
 					<p class="notes-box">{{$note->content}}</p>
 					<footer style="border-bottom: 1px solid #cccccc;">
-						<font size="2" style="margin-left: 10px;">{{date_format(new DateTime($note->created_at), 'm/d/Y H:m:s')}}</font>
+						<font size="2" style="margin-left: 10px;">
+							{{$note->first_name }}
+							{{date_format(new DateTime($note->created_at), 'm/d/Y H:m:s')}}
+							}
+						</font>
 					</footer>
 					
 				</div>

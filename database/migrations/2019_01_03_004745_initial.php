@@ -44,6 +44,13 @@ class Initial extends Migration
             $table->timestamps();   
         });
 
+        Schema::create('user_notes', function(Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('note_id');
+            $table->timestamps();
+        });
+
         Schema::create('user_project', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');

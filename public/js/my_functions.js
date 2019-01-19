@@ -66,7 +66,7 @@ function retrieveNotes(projectId, projectName) {
 					'<div>' +
 						'<p class="notes-box">' + json[i].content + '</p>' +
 						'<footer style="border-bottom: 1px solid #cccccc;">' +
-							'<font size="2" style="margin-left: 10px;">'+ noteDate + '</font>' +
+							'<font size="2" style="margin-left: 10px;">'+ json[i].first_name + ' ' + json[i].last_name + ' at ' + noteDate + '</font>' +
 						'</footer>' +
 					'</div>';
 
