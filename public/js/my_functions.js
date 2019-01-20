@@ -60,8 +60,7 @@ function retrieveNotes(projectId, projectName) {
 				document.getElementById('title-notes').innerHTML = projectName;
 				$('#section-notes').empty();
 				for (i in json) {
-					var options = {day: '2-digit', year: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'};
-					var noteDate = (new Date(json[i].created_at)).toLocaleDateString("en-US", options);
+					var noteDate = formatDate(json[i].created_at);
 					var toAppend = 
 					'<div>' +
 						'<p class="notes-box">' + json[i].content + '</p>' +
@@ -78,5 +77,13 @@ function retrieveNotes(projectId, projectName) {
 			}
 		});
 	});
+
+
+	function formatDate(dateString) {
+		var options = {day: '2-digit', year: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'};
+	    var noteDate = (new Date(dateString)).toLocaleDateString("en-US", options);
+
+	    return noteDate;
+	}
 }
 

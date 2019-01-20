@@ -56,17 +56,16 @@
 				<font>Notes</font>
 				
 			</header>
-			<button class="btn btn-success btn-sm"><i class="fa fa-plus mr-2"></i>Add Note</button>
-			<div class="card-body" style="overflow-y: auto; max-height: 800px;">
+			<button id="btn-new-note" class="btn btn-success btn-sm"><i class="fa fa-plus mr-2"></i>Add Note</button>
+			<div id="section-notes" class="card-body" style="overflow-y: auto; max-height: 800px;">
 
 				@foreach($notes as $note)
 				<div>
 					<p class="notes-box">{{$note->content}}</p>
 					<footer style="border-bottom: 1px solid #cccccc;">
 						<font size="2" style="margin-left: 10px;">
-							{{$note->first_name }}
+							{{$note->first_name . ' ' . $note->last_name . ' at ' }}
 							{{date_format(new DateTime($note->created_at), 'm/d/Y H:m:s')}}
-							}
 						</font>
 					</footer>
 					
@@ -124,6 +123,35 @@
 		
 	</div>
 
+
+{{-- Modal New Project --}}
+<div class="modal fade" id="newNoteModal" role="modal">
+	<div class="modal-dialog modal-lg" >
+
+		{{-- Modal Content --}}
+		<div class="modal-content">
+			<header class="card-header">
+				<h4 class="modal-title">Create New Note</h4>
+			</header>
+
+			<div class="modal-body">
+				<div class="grid-item create-modal-item3">
+					<label for="input-note">Description</label>
+					<textarea id="input-note" class="textarea" rows="5" style="width: 100%"></textarea>
+				</div>
+			</div>
+
+			<footer class="card-footer">
+				<button style="float: right; width: 100px;" id="btn-save-note" class="btn btn-md btn-success"><i></i>Save</button>
+				<button style="float: right; width: 100px;" id="btn-cancel-note" data-dismiss="modal" class="btn btn-md btn-warning"><i></i>Cancel</button>
+			</footer>
+		</div>
+		
+	</div>
+
+
+
+
 @endsection
 
 @section('javascript')
@@ -139,4 +167,73 @@
         $('.dataTables_length').addClass('bs-select');
       });
     </script>
+
+
+    <script>
+
+    	
+
+    	$(document).ready(function(){
+
+    		$('#btn-new-note').click(function(event) {
+    			$('#newNoteModal').modal();
+    		});
+
+    		$('#btn-save-note').on('click', function(event) {
+    			$.ajax({
+    				type: 'POST',
+    				url: '/notes',
+    				data: {
+    					'_token' : $('input[name=_token]').val(),
+    					'project_id' : {{$project->id}},
+    					'content' : $('#input-note').val()
+    				},
+
+    				success: function(json) {
+    					toastr.success('Saved note: ' + json.id, 'Success', {timeOut: 5000});
+
+    					<?php $user = auth()->user(); ?>
+						var toPrepend = 
+							'<div>' +
+								'<p class="notes-box">' + json.content + '</p>' +
+								'<footer style="border-bottom: 1px solid #cccccc;">' +
+									'<font size="2" style="margin-left: 10px;">' +
+										'{{$user->first_name . ' ' . $user->last_name}}' + ' at ' +
+										formatDate(json.created_at) + 
+									'</font>' +
+								'</footer>' +
+							'</div>'; 
+
+						$('#newNoteModal').modal('toggle');
+						$(toPrepend).prependTo('#section-notes');
+    				},
+
+    				error: function(json) {
+    					console.log('app: ' + json.responseText);
+    					var jsonString = '';
+    					$.each(JSON.parse(json.responseText), function(key, value) {
+    						jsonString += value;
+    						console.log('error value = ' + value);
+    					});
+    					toastr.error(jsonString, 'Error', {timeOut: 5000});
+    					
+    				}
+    			});
+    		});
+    		
+    	});
+
+
+    /***************
+	 * There has to be a way of making this function available from my_functions.js!!!!  - check Vue videos
+     */
+	function formatDate(dateString) {
+		var options = {day: '2-digit', year: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'};
+	    var noteDate = (new Date(dateString)).toLocaleDateString("en-US", options);
+
+	    return noteDate;
+	}
+    </script>
+
+
 @endsection

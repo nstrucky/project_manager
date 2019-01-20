@@ -109,6 +109,9 @@
     </div>
 
     {{-- JAVASCRIPT ******************************************************************************************************************--}}
+    
+        <script type="text/javascript" src="{{asset('js/my_functions.js')}}"></script>
+
     <!-- JQuery -->
     <script type="text/javascript" src="{{asset('js/jquery-3.3.1.min.js')}}"></script>
     <!-- Bootstrap tooltips -->
@@ -120,7 +123,7 @@
     <!-- MDBootstrap Datatables  -->
     <script type="text/javascript" src="{{asset('js/addons/datatables.min.js')}}"></script>
 
-    <script type="text/javascript" src="{{asset('js/my_functions.js')}}"></script>
+
         <!-- toastr notifications -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
