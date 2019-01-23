@@ -10,6 +10,10 @@
 
 @section('content')
 
+	<form name="vars">
+		<input type="hidden" name="selectedProjectId" value="">
+	</form>
+
 	<div class="card" id="cardview-all-projects" style="margin: 25px;">
 		<header class="card-header">Projects</header>
 		<div class="card-body">
@@ -177,7 +181,7 @@
 					<font id="title-notes">Notes</font>
 					
 				</header>
-				<button class="btn btn-success btn-sm"><i class="fa fa-plus mr-2"></i>Add Note</button>
+				<button id="btn-new-note" class="btn btn-success btn-sm"><i class="fa fa-plus mr-2"></i>Add Note</button>
 
 				<div id="section-notes" class="card-body" style="overflow-y: auto; max-height: 450px;">
 					
@@ -237,6 +241,32 @@
 	</div>
 </div>
 
+
+{{-- Modal New Note (this is repeated in projectview) --}}
+<div class="modal fade" id="newNoteModal" role="modal">
+	<div class="modal-dialog modal-lg" >
+
+		{{-- Modal Content --}}
+		<div class="modal-content">
+			<header class="card-header">
+				<h4 class="modal-title">Create New Note</h4>
+			</header>
+
+			<div class="modal-body">
+				<div class="grid-item create-modal-item3">
+					<label for="input-note">Description</label>
+					<textarea id="input-note" class="textarea" rows="5" style="width: 100%"></textarea>
+				</div>
+			</div>
+
+			<footer class="card-footer">
+				<button style="float: right; width: 100px;" id="btn-save-note" class="btn btn-md btn-success"><i></i>Save</button>
+				<button style="float: right; width: 100px;" id="btn-cancel-note" data-dismiss="modal" class="btn btn-md btn-warning"><i></i>Cancel</button>
+			</footer>
+		</div>
+		
+	</div>
+</div>
 
 @endsection
 
@@ -329,6 +359,51 @@
         $('.dataTables_length').addClass('bs-select');
       });
     </script>
+
+        {{-- Saving a new note --}}
+    <script>
+    	$(document).ready(function(){
+
+    		$('#btn-new-note').click(function(event) {
+    			$('#newNoteModal').modal();
+    		});
+
+    		$('#btn-save-note').on('click', function(event) {
+    			$.ajax({
+    				type: 'POST',
+    				url: '/notes',
+    				data: {
+
+    					// Project ID...
+    					// I NEED TO FIX THIS http://www.skytopia.com/project/articles/compsci/form.html
+    					'_token' : $('input[name=_token]').val(),
+    					'project_id' : document.vars.selectedProjectId.value,
+    					'content' : $('#input-note').val()
+    				},
+
+    				success: function(json) {
+    					toastr.success('Saved note: ' + json.id, 'Success', {timeOut: 5000});
+    					<?php $user = auth()->user(); ?>
+						var toPrepend = makeNoteDiv(json.content, '{{$user->first_name}}', '{{$user->last_name}}', json.created_at);
+						$('#newNoteModal').modal('toggle');
+						$(toPrepend).prependTo('#section-notes');
+    				},
+
+    				error: function(json) {
+    					console.log('app: ' + json.responseText);
+    					var jsonString = '';
+    					$.each(JSON.parse(json.responseText), function(key, value) {
+    						jsonString += value;
+    						console.log('error value = ' + value);
+    					});
+    					toastr.error(jsonString, 'Error', {timeOut: 5000});	
+    				}
+    			});
+    		});
+    		
+    	});
+
+    </script>		
 
 
 

@@ -124,7 +124,7 @@
 	</div>
 
 
-{{-- Modal New Project --}}
+{{-- Modal New Note --}}
 <div class="modal fade" id="newNoteModal" role="modal">
 	<div class="modal-dialog modal-lg" >
 
@@ -148,6 +148,7 @@
 		</div>
 		
 	</div>
+</div>
 
 
 
@@ -156,23 +157,9 @@
 
 @section('javascript')
 
-    {{-- Format Table --}}
+
+    {{-- Saving a new note --}}
     <script>
-      $(document).ready(function () {
-        $('#tasksTable').DataTable({
-          "scrollY": "300px",
-          "scrollCollapse": true,
-          "searching" : false
-        });
-        $('.dataTables_length').addClass('bs-select');
-      });
-    </script>
-
-
-    <script>
-
-    	
-
     	$(document).ready(function(){
 
     		$('#btn-new-note').click(function(event) {
@@ -191,19 +178,8 @@
 
     				success: function(json) {
     					toastr.success('Saved note: ' + json.id, 'Success', {timeOut: 5000});
-
     					<?php $user = auth()->user(); ?>
-						var toPrepend = 
-							'<div>' +
-								'<p class="notes-box">' + json.content + '</p>' +
-								'<footer style="border-bottom: 1px solid #cccccc;">' +
-									'<font size="2" style="margin-left: 10px;">' +
-										'{{$user->first_name . ' ' . $user->last_name}}' + ' at ' +
-										formatDate(json.created_at) + 
-									'</font>' +
-								'</footer>' +
-							'</div>'; 
-
+						var toPrepend = makeNoteDiv(json.content, '{{$user->first_name}}', '{{$user->last_name}}', json.created_at);
 						$('#newNoteModal').modal('toggle');
 						$(toPrepend).prependTo('#section-notes');
     				},
@@ -215,25 +191,30 @@
     						jsonString += value;
     						console.log('error value = ' + value);
     					});
-    					toastr.error(jsonString, 'Error', {timeOut: 5000});
-    					
+    					toastr.error(jsonString, 'Error', {timeOut: 5000});	
     				}
     			});
     		});
     		
     	});
 
-
-    /***************
-	 * There has to be a way of making this function available from my_functions.js!!!!  - check Vue videos
-     */
-	function formatDate(dateString) {
-		var options = {day: '2-digit', year: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'};
-	    var noteDate = (new Date(dateString)).toLocaleDateString("en-US", options);
-
-	    return noteDate;
-	}
     </script>
+
+
+    {{-- Format Table --}}
+    <script>
+      $(document).ready(function () {
+        $('#tasksTable').DataTable({
+          "scrollY": "300px",
+          "scrollCollapse": true,
+          "searching" : false
+        });
+        $('.dataTables_length').addClass('bs-select');
+      });
+    </script>
+
+
+
 
 
 @endsection
