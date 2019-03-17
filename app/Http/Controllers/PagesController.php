@@ -9,4 +9,9 @@ class PagesController extends Controller
     public function home() {
     	return view('welcome');
     }
+
+
+    public function manageTokens() {
+    	return view('auth.manage_tokens');
+    }
 }
