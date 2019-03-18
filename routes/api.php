@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/test', function (Request $request) {
+	return \App\User::all();
+})->middleware('auth:api'); /*For this middleware, authorization in header must be in the form of "Bearer [access_token]}*/
+
+
