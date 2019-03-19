@@ -35,6 +35,7 @@
 
 </head>
 <body>
+
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
@@ -81,6 +82,10 @@
                                         {{ __('Logout') }}
                                     </a>
 
+                                    <a class="dropdown-item" href="{{route('manageTokens')}}">
+                                        Manage API Credentials
+                                    </a>
+
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -123,6 +128,7 @@
     <!-- MDBootstrap Datatables  -->
     <script type="text/javascript" src="{{asset('js/addons/datatables.min.js')}}"></script>
 
+    
 
         <!-- toastr notifications -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
