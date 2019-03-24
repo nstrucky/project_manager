@@ -27,3 +27,5 @@ Route::middleware('auth:api')->get('/logout', function (Request $request) {
 	$response = 'You have been successfully logged out.';
 	return response($response, 200);
 });
+
+Route::middleware('auth:api')->get('/projects/{project}/notes', 'APIv1\NotesController@projectNotes');
