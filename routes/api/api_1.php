@@ -28,4 +28,32 @@ Route::middleware('auth:api')->get('/logout', function (Request $request) {
 	return response($response, 200);
 });
 
-Route::middleware('auth:api')->get('/projects/{project}/notes', 'APIv1\NotesController@projectNotes');
+
+Route::middleware('auth:api')->group(function() {
+
+	/*
+	|-----------------------------------------------------------------------------
+	| Project Resource and Routes
+	|-----------------------------------------------------------------------------
+	*/
+	Route::resource('/projects', 'APIv1\NotesController');
+	Route::get('/projects/{project}/notes', 'APIv1\NotesController@projectNotes');
+	Route::get('/projects/{project}/users', 'APIv1\UsersController@projectUsers');
+
+	/*
+	|-----------------------------------------------------------------------------
+	| User Resource and Routes
+	|-----------------------------------------------------------------------------
+	*/
+	Route::resource('/users', 'APIv1\UsersController');
+	Route::get('/users/{user}/projects', 'APIv1\ProjectsController@userProjects');
+	Route::get('/users/{user}/tasks', 'APIv1\TasksController@userTasks');
+
+	/*
+	|-----------------------------------------------------------------------------
+	| Tasks Resource and Routes
+	|-----------------------------------------------------------------------------
+	*/
+	Route::resource('/tasks', 'APIv1\TasksController');
+
+});
