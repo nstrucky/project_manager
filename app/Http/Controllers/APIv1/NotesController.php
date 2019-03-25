@@ -114,6 +114,13 @@ class NotesController extends Controller {
         //
     }
 
+
+    /**
+    *--------------------------------------------------------------------
+    * Route: /projects/{project}/notes
+    *--------------------------------------------------------------------
+    * @param int $id - projects's id
+    */
     public function projectNotes($id) {
         //select u.first_name, u.last_name, n.* from user_notes un inner join notes n on un.note_id = n.id inner join users u on un.user_id = u.id where n.project_id = 1;
 
