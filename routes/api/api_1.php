@@ -38,7 +38,7 @@ Route::middleware('auth:api')->group(function() {
 	| Project Resource and Routes
 	|-----------------------------------------------------------------------------
 	*/
-	Route::resource('/projects', 'APIv1\NotesController');
+	Route::resource('/projects', 'APIv1\ProjectsController');
 	Route::get('/projects/{project}/notes', 'APIv1\NotesController@projectNotes');
 	Route::get('/projects/{project}/users', 'APIv1\UsersController@projectUsers');
 
@@ -58,4 +58,10 @@ Route::middleware('auth:api')->group(function() {
 	*/
 	Route::resource('/tasks', 'APIv1\TasksController');
 
+	/*
+	|-----------------------------------------------------------------------------
+	| Notes Resource and Routes
+	|-----------------------------------------------------------------------------
+	*/
+	Route::resource('/notes', 'APIv1\NotesController');
 });

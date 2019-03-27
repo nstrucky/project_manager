@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 use \App\Note;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class NotesController extends Controller {
 
@@ -17,6 +18,17 @@ class NotesController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create()
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
         //
     }
@@ -77,19 +89,15 @@ class NotesController extends Controller {
      */
     public function show($id)
     {
-        //
+        $note = \App\Note::find($id);
+        if (is_null($note)) {
+            return response()->json(['error' => 'Note does not exist'], 404);
+        }
+
+        return response()->json($note);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -100,7 +108,31 @@ class NotesController extends Controller {
      */
     public function update(Request $request, $id)
     {
-        //
+                if (!Auth::check()) {
+            return response()->json(['error' => 'user not authenticated'], 422);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|min:3|max:500'
+        ]);
+
+        if ($validator->fails()) { // failure
+            $errors = $validator->errors();
+
+            return response()->json([
+                'error' => 'Validation Error, check variables input',
+                'content' => $errors->first('content')
+            ], 422);
+        }
+
+        $note = \App\Note::find($id);
+        if (is_null($note)) {
+            return response()->json(['error' => 'Note does not exist'], 404);
+        }
+        $note->content = $request->content;
+        $note->save();
+
+        return response()->json($note); 
     }
 
     /**
@@ -111,7 +143,22 @@ class NotesController extends Controller {
      */
     public function destroy($id)
     {
-        //
+        if (!Auth::check()) {
+            return response()->json(['error' => 'user not authenticated'], 422);
+        }
+
+        $note = \App\Note::find($id);
+
+        if (is_null($note)) {
+            return response()->json(['error' => 'Note does not exist'], 404);
+        }
+
+        if ($note->delete()) { //success
+            return response()->json(['message' => 'Successfully deleted note: '.$id], 200);
+        }
+        
+        return response()->json(['error' => 'Error removing note'], 400);
+        
     }
 
 
