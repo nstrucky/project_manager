@@ -40,17 +40,11 @@ class Initial extends Migration
         Schema::create('notes', function(Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('project_id');
+            $table->unsignedInteger('user_id');
             $table->text('content');
             $table->timestamps();   
 
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-        });
-
-        Schema::create('user_notes', function(Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('note_id');
-            $table->timestamps();
         });
 
         Schema::create('user_project', function(Blueprint $table) {

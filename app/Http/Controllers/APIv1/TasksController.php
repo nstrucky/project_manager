@@ -99,4 +99,18 @@ class TasksController extends Controller
         $userTasks = \App\User::find($id)->tasks;
         return response()->json($userTasks);
     }
+
+
+    /**
+    *--------------------------------------------------------------------
+    * Route: /projects/{project}/tasks
+    *--------------------------------------------------------------------
+    * @param int $id - projects's id
+    */
+    public function projectTasks($id) {
+        //TODO validate params & error handling
+
+        $projectTasks = \App\Project::find($id)->tasks;
+        return response()->json($projectTasks);
+    }
 }

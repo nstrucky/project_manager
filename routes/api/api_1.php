@@ -41,6 +41,7 @@ Route::middleware('auth:api')->group(function() {
 	Route::resource('/projects', 'APIv1\ProjectsController');
 	Route::get('/projects/{project}/notes', 'APIv1\NotesController@projectNotes');
 	Route::get('/projects/{project}/users', 'APIv1\UsersController@projectUsers');
+	Route::get('/projects/{project}/tasks', 'APIv1\TasksController@projectTasks');
 
 	/*
 	|-----------------------------------------------------------------------------
@@ -50,6 +51,7 @@ Route::middleware('auth:api')->group(function() {
 	Route::resource('/users', 'APIv1\UsersController');
 	Route::get('/users/{user}/projects', 'APIv1\ProjectsController@userProjects');
 	Route::get('/users/{user}/tasks', 'APIv1\TasksController@userTasks');
+	Route::get('/users/{user}/notes', 'APIv1\NotesController@userNotes');
 
 	/*
 	|-----------------------------------------------------------------------------

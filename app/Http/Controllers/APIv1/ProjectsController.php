@@ -97,13 +97,21 @@ class ProjectsController extends Controller
 
         //TODO verify params & error handling
 
-        $projects = DB::table('user_project')
-            ->join('users', 'users.id', '=', 'user_project.user_id')
-            ->join('projects', 'projects.id', '=', 'user_project.project_id')
-            ->select('projects.*')
-            ->where('users.id', $id)
-            // ->orderby('notes.created_at', 'desc')
-            ->get();
+        $user = \App\User::find($id);
+
+        if (is_null($user)) {
+            return response()->json(['error' => 'Could not find user'], 422);
+        }
+
+        $projects = $user->projects;
+
+        // $projects = DB::table('user_project')
+        //     ->join('users', 'users.id', '=', 'user_project.user_id')
+        //     ->join('projects', 'projects.id', '=', 'user_project.project_id')
+        //     ->select('projects.*')
+        //     ->where('users.id', $id)
+        //     // ->orderby('notes.created_at', 'desc')
+        //     ->get();
 
         return response()->json($projects);
     }
