@@ -63,18 +63,18 @@ class NotesController extends Controller {
         $note = new Note();
         $note->project_id = $request->project_id;
         $note->content = $request->content;
-
+        $note->user_id = Auth::user()->id;
         $note->save();
 
         if ($note->id != null && $note->id != 0) { //success
 
-           $id = DB::table('user_notes')->insertGetId([
-                'user_id' => Auth::user()->id, 
-                'note_id' => $note->id,
-                'created_at' => \Carbon\Carbon::now(),
-                'updated_at' => \Carbon\Carbon::now()
+           // $id = DB::table('user_notes')->insertGetId([
+           //      'user_id' => Auth::user()->id, 
+           //      'note_id' => $note->id,
+           //      'created_at' => \Carbon\Carbon::now(),
+           //      'updated_at' => \Carbon\Carbon::now()
 
-           ]);
+           // ]);
 
            return response()->json($note); 
         }
@@ -177,15 +177,12 @@ class NotesController extends Controller {
             return response()->json(['error' => 'could not find project'], 404);
         }
 
-        $notes = $project->notes;
-
-        // $notes = DB::table('user_notes')
-        //     ->join('users', 'users.id', '=', 'user_notes.user_id')
-        //     ->join('notes', 'notes.id', '=', 'user_notes.note_id')
-        //     ->select('notes.*', 'users.first_name', 'users.last_name')
-        //     ->where('notes.project_id', $id)
-        //     ->orderby('notes.created_at', 'desc')
-        //     ->get();
+        $notes = DB::table('notes')
+            ->join('users', 'users.id', '=', 'notes.user_id')
+            ->select('notes.*', 'users.first_name', 'users.last_name')
+            ->where('notes.project_id', $id)
+            ->orderby('notes.created_at', 'desc')
+            ->get();
 
         return response()->json($notes);
     }

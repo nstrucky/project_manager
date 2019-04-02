@@ -98,7 +98,12 @@ class ProjectsController extends Controller
     public function show(\App\Project $project)
     {
 
-        $notes = $project->notes;
+        $notes = DB::table('notes')
+            ->join('users', 'users.id', '=', 'notes.user_id')
+            ->select('notes.*', 'users.first_name', 'users.last_name')
+            ->where('notes.project_id', $project->id)
+            ->orderby('notes.created_at', 'desc')
+            ->get();
 
         $status_codes = \App\StatusCode::all();
         $tasks = $project->tasks;
