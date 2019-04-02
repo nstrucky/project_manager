@@ -38,7 +38,59 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$request->due_date)) {
+            return response()->json(['error' => 'Due date must be in YYYY-MM-DD format'], 400);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3|max:255',
+            'account_name' => 'required|min:3|max:255',
+            'account_number' => 'required|min:1|max:6',
+            'description' => 'required|min:3|max:500',
+            'work_order' => 'required|unique:projects|min:1|max:6',
+            'due_date' => 'required',
+            'status' => 'required|min:1|max:25'
+
+        ]);
+
+        if ($validator->fails()) {
+
+            $errors = $validator->errors();
+
+            $name = $errors->first('name');
+            $account_name = $errors->first('account_name');
+            $account_number = $errors->first('account_number');
+            $description = $errors->first('description');
+            $work_order = $errors->first('work_order');
+            $due_date = $errors->first('due_date');
+            $status = $errors->first('status');
+
+            return response()->json([
+                'name' => $name,
+                 'account_name' => $account_name,
+                  'account_number' => $account_number,
+                  'description' => $description,
+                  'work_order' => $work_order,
+                  'due_date' => $due_date,
+                  'status' => $status
+              ], 422);
+        } else {
+            $project = new \App\Project();
+            $project->name = $request->name;
+            $project->account_name = $request->account_name;
+            $project->account_number = $request->account_number;
+            $project->description = $request->description;
+            $project->work_order = $request->work_order;
+            $project->due_date = $request->due_date;
+            $project->status = $request->status;
+            
+            if($project->save()) {
+                return response()->json(['message' => 'Project saved to DB'], 200);
+            }
+
+            return response()->json(['error' => 'Problem saving project to DB'], 422);
+        }
     }
 
     /**
@@ -49,7 +101,13 @@ class ProjectsController extends Controller
      */
     public function show($id)
     {
-        //
+        $project = \App\Project::find($id);
+
+        if (is_null($project)) {
+            return response()->json(['error' => 'Could not find project: ' . $id], 404);
+        }
+
+        return response()->json($project);
     }
 
     /**
@@ -72,7 +130,62 @@ class ProjectsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$request->due_date)) {
+            return response()->json(['error' => 'Due date must be in YYYY-MM-DD format'], 400);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3|max:255',
+            'account_name' => 'required|min:3|max:255',
+            'account_number' => 'required|min:1|max:6',
+            'description' => 'required|min:3|max:500',
+            'work_order' => 'required|min:1|max:6', // this just ignores the fact that you can name a work order the same as another
+            'due_date' => 'required',
+            'status' => 'required|min:1|max:25'
+        ]);
+
+        if ($validator->fails()) { // failure
+            $errors = $validator->errors();
+
+            $name = $errors->first('name');
+            $account_name = $errors->first('account_name');
+            $account_number = $errors->first('account_number');
+            $description = $errors->first('description');
+            $work_order = $errors->first('work_order');
+            $due_date = $errors->first('due_date');
+            $status = $errors->first('status');
+
+            return response()->json([
+                'error' => 'Validation Error, check variables input',
+                'name' => $name,
+                'account_name' => $account_name,
+                'account_number' => $account_number,
+                'description' => $description,
+                'work_order' => $work_order,
+                'due_date' => $due_date,
+                'status' => $status
+            ], 422);
+        }
+
+        $project = \App\Project::find($id);
+        if (is_null($project)) {
+            return response()->json(['error' => 'Project ' . $id .' does not exist'], 404);
+        }
+
+        $project->name = $request->name;
+        $project->account_name = $request->account_name;
+        $project->account_number = $request->account_number;
+        $project->description = $request->description;
+        $project->work_order = $request->work_order;
+        $project->due_date = $request->due_date;
+        $project->status = $request->status;
+
+        if($project->save()) {
+            return response()->json(['message' => 'Project saved to DB'], 200);
+        }
+
+        return response()->json(['error' => 'Problem saving project to DB'], 422);
     }
 
     /**
@@ -83,7 +196,17 @@ class ProjectsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $project = \App\Project::find($id);
+
+        if (is_null($project)) {
+            return response()->json(['error' => 'Project does not exist'], 404);
+        }
+
+        if ($project->delete()) { //success
+            return response()->json(['message' => 'Successfully deleted project: '.$id], 200);
+        }
+        
+        return response()->json(['error' => 'Error removing project'], 400);
     }
 
 
