@@ -154,7 +154,8 @@ class NotesController extends Controller {
         }
 
         if ($note->delete()) { //success
-            return response()->json(['message' => 'Successfully deleted note: '.$id], 200);
+            return response()->json(['message' => 'Successfully deleted note: ',
+                                        'id' => $id], 200);
         }
         
         return response()->json(['error' => 'Error removing note'], 400);

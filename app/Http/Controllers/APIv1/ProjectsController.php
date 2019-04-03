@@ -39,17 +39,13 @@ class ProjectsController extends Controller
     public function store(Request $request)
     {
 
-        if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$request->due_date)) {
-            return response()->json(['error' => 'Due date must be in YYYY-MM-DD format'], 400);
-        }
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3|max:255',
             'account_name' => 'required|min:3|max:255',
             'account_number' => 'required|min:1|max:6',
             'description' => 'required|min:3|max:500',
             'work_order' => 'required|unique:projects|min:1|max:6',
-            'due_date' => 'required',
+            'due_date' => 'required|date_format:Y-m-d',
             'status' => 'required|min:1|max:25'
 
         ]);
@@ -131,17 +127,13 @@ class ProjectsController extends Controller
     public function update(Request $request, $id)
     {
 
-        if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$request->due_date)) {
-            return response()->json(['error' => 'Due date must be in YYYY-MM-DD format'], 400);
-        }
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3|max:255',
             'account_name' => 'required|min:3|max:255',
             'account_number' => 'required|min:1|max:6',
             'description' => 'required|min:3|max:500',
             'work_order' => 'required|min:1|max:6', // this just ignores the fact that you can name a work order the same as another
-            'due_date' => 'required',
+            'due_date' => 'required|date_format:Y-m-d',
             'status' => 'required|min:1|max:25'
         ]);
 
@@ -203,7 +195,9 @@ class ProjectsController extends Controller
         }
 
         if ($project->delete()) { //success
-            return response()->json(['message' => 'Successfully deleted project: '.$id], 200);
+            return response()->json(['message' => 'Successfully deleted project',
+                                        'id' => $id, 
+                                        'project_name' => $project->name], 200);
         }
         
         return response()->json(['error' => 'Error removing project'], 400);
