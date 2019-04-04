@@ -3,13 +3,14 @@
 namespace App;
 
 use Laravel\Passport\HasApiTokens;
+use Laravel\Scout\Searchable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -40,5 +41,19 @@ class User extends Authenticatable
 
     public function projects() {
         return $this->belongsToMany(Project::class, 'user_project', 'user_id', 'project_id');
+    }
+
+        /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        // Customize array...
+
+        return $array;
     }
 }

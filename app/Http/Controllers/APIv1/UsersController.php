@@ -104,16 +104,15 @@ class UsersController extends Controller
             return response()->json(['error' => 'Could not find project'], 404);
         }
 
-        $users = $project->users;
+        // $users = $project->users;
 
-
-        // $users = DB::table('user_project')
-        //     ->join('users', 'users.id', '=', 'user_project.user_id')
-        //     ->join('projects', 'projects.id', '=', 'user_project.project_id')
-        //     ->select('users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.email', 'users.user_role')
-        //     ->where('projects.id', $id)
-        //     // ->orderby('notes.created_at', 'desc')
-        //     ->get();
+        $users = DB::table('user_project')
+            ->join('users', 'users.id', '=', 'user_project.user_id')
+            ->join('projects', 'projects.id', '=', 'user_project.project_id')
+            ->select('users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.email', 'users.user_role')
+            ->where('projects.id', $id)
+            // ->orderby('notes.created_at', 'desc')
+            ->get();
 
         return response()->json($users);
     }

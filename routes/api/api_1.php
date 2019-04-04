@@ -33,6 +33,14 @@ Route::post('/register', 'APIv1\Auth\RegisterController@register');
 
 Route::middleware('auth:api')->group(function() {
 
+
+	/*
+	|-----------------------------------------------------------------------------
+	| Search Routes (/{model}/search?q=queryString)
+	|-----------------------------------------------------------------------------
+	*/
+	Route::get('/users/search', 'APIv1\SearchController@searchUsers');
+
 	/*
 	|-----------------------------------------------------------------------------
 	| Project Resource and Routes
@@ -41,6 +49,10 @@ Route::middleware('auth:api')->group(function() {
 	Route::resource('/projects', 'APIv1\ProjectsController');
 	Route::get('/projects/{project}/notes', 'APIv1\NotesController@projectNotes');
 	Route::get('/projects/{project}/users', 'APIv1\UsersController@projectUsers');
+/*************/
+	Route::post('/projects/{project}/users', 'APIv1\UsersController@addProjectUser');
+	Route::delete('/projects/{project}/users', 'APIv1\UsersController@removeProjectUser');
+/*************/
 	Route::get('/projects/{project}/tasks', 'APIv1\TasksController@projectTasks');
 
 	/*
