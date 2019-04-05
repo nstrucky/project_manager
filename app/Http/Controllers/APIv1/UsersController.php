@@ -5,31 +5,13 @@ namespace App\Http\Controllers\APIv1;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 use App\Http\Controllers\Controller;
-
+use Auth;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -39,7 +21,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Handled by Auth registration
     }
 
     /**
@@ -50,18 +32,13 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        $user = \App\User::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        if (is_null($user)) {
+            return response()->json(['error' => 'Could not find user: ' . $id], 404);
+        }
+
+        return response()->json($user);
     }
 
     /**
@@ -73,7 +50,49 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|min:3|max:255',
+            'first_name' => 'required|min:3|max:255',
+            'last_name' => 'required|min:1|max:255',
+            'email' => 'required|min:3|max:500',
+            'user_role' => 'required|min:1|max:255', 
+        ]);
+
+        if ($validator->fails()) { // failure
+            $errors = $validator->errors();
+
+            $username = $errors->first('username');
+            $first_name = $errors->first('first_name');
+            $last_name = $errors->first('last_name');
+            $email = $errors->first('email');
+            $user_role = $errors->first('user_role');
+
+            return response()->json([
+                'error' => 'Validation Error, check variables input',
+                'username' => $username,
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'email' => $email,
+                'user_role' => $user_role,
+            ], 422);
+        }
+
+        $user = \App\User::find($id);
+        if (is_null($user)) {
+            return response()->json(['error' => 'User ' . $id .' does not exist'], 404);
+        }
+
+        $user->username = $request->username;
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->user_role = $request->user_role;
+
+        if($user->save()) {
+            return response()->json(['message' => 'User saved to DB'], 200);
+        }
+
+        return response()->json(['error' => 'Problem saving user to DB'], 422);
     }
 
     /**
@@ -84,7 +103,7 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //Handled by registration...?
     }
 
     /**
@@ -118,5 +137,81 @@ class UsersController extends Controller
     }
 
 
+    public function addProjectUser(Request $request, \App\Project $project) {
+        
+        $projectId = $project->id;
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => ['required', 'integer', 'exists:users,id', 
+                Rule::unique('user_project', 'user_id')->where(function ($query) use ($projectId) {
+                    return $query->where('project_id', $projectId);
+                })
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $user_id = $errors->first('user_id');
+            return response()->json([
+                'error' => $user_id
+            ], 409);
+        }
+
+        $addUser = \App\User::find($request->user_id);
+
+        if (is_null($addUser)) {
+            return response()->json(['error' => 'could not find user id to add to project',
+                'user_id' => $request->user_id], 404);
+        }
+
+        $addUserId = $addUser->id;
+
+        $userProjectId = DB::table('user_project')->insertGetId([
+            'user_id' => $addUserId,
+            'project_id' => $projectId
+        ]);
+
+        if (is_null($userProjectId) || $userProjectId == 0) {
+            return response()->json(['error' => 'could not create user_project record'], 500);
+        }
+
+        return response()->json(['message' => 'successfully added user to project',
+                                'id' => $userProjectId,
+                                'added_user' => $addUser
+                                ], 200);
+    }
+
+    public function removeProjectUser(Request $request, \App\Project $project) {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer|exists:user_project|exists:users,id' 
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $user_id = $errors->first('user_id');
+            return response()->json([
+                'error' => $user_id
+            ], 422);
+        }
+
+        $query = DB::table('user_project')
+            
+            ->where('project_id', '=', $project->id);
+        $records = $query->select()->get();
+
+        if ($records->count() <= 1) {
+            return response()->json(['error' => 'Could not remove user, only one user assigned to project'], 422);
+        }
+
+        $success = $query->where('user_id', '=', $request->user_id)->delete();
+
+        if ($success) {
+            return response()->json(['user_id' => $request->user_id,
+                'message' => 'user successfully removed from project'], 200);
+        }
+
+        return response()->json(['error' => 'could not remove user from project'], 500);
+
+    }
 
 }

@@ -51,8 +51,6 @@ class Initial extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('project_id');
-
-            $table->timestamps();
         });
 
         Schema::create('tasks', function(Blueprint $table) {

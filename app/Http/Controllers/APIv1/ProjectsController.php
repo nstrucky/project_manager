@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Controller;
+use Auth;
 
 class ProjectsController extends Controller
 {
@@ -38,6 +39,11 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'user not authenticated'], 422);
+        }
+
+        $userId = Auth::user()->id;
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3|max:255',
@@ -82,10 +88,21 @@ class ProjectsController extends Controller
             $project->status = $request->status;
             
             if($project->save()) {
-                return response()->json(['message' => 'Project saved to DB'], 200);
+                $userProjectId = DB::table('user_project')->insertGetId([
+                    'user_id' => $userId,
+                    'project_id' => $project->id
+                ]);
+
+                if (is_null($userProjectId) || $userProjectId == 0) {
+                    return response()->json(['error' => 'could not create user_project record'], 500);
+                }
+
+                return response()->json(['id' => $project->id,
+                                        'user_id' => $userId,
+                                        'message' => 'Project saved to DB'], 200);
             }
 
-            return response()->json(['error' => 'Problem saving project to DB'], 422);
+            return response()->json(['error' => 'Problem saving project to DB'], 500);
         }
     }
 
