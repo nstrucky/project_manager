@@ -84,7 +84,7 @@ class TasksController extends Controller
             $task->task_template_id = 0; //TODO take from request in next API version, defaulting all to 0 for now
 
             if($task->save()) {
-                return response()->json(['message' => 'Task saved to DB'], 200);
+                return response()->json(['message' => 'Task saved to DB'], 200, [], JSON_NUMERIC_CHECK);
             }
         }
 
@@ -129,12 +129,12 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'status' => 'required|min:3|max:255',
-            'title' => 'required|min:1|max:255',
-            'start_date' => 'required|date_format:Y-m-d',
-            'due_date' => 'required|date_format:Y-m-d',
-            'user_id' => 'required|integer',
-            'project_id' => 'required|integer',
+            'status' => 'min:3|max:255',
+            'title' => 'min:1|max:255',
+            'start_date' => 'date_format:Y-m-d',
+            'due_date' => 'date_format:Y-m-d',
+            'user_id' => 'integer',
+            'project_id' => 'integer',
             'task_template_id' => 'integer'
 
         ]);
@@ -167,16 +167,18 @@ class TasksController extends Controller
         if (is_null($task)) {
             return response()->json(['error' => 'Task ' . $id .' does not exist'], 404);
         }
-        $task->status = $request->status;
-        $task->title = $request->title;
-        $task->start_date = $request->start_date;
-        $task->due_date = $request->due_date;
-        $task->user_id = $request->user_id;
-        $task->project_id = $request->project_id;
+
+        if (!is_null($request->status)) $task->status = $request->status;
+        if (!is_null($request->title)) $task->title = $request->title;
+        if (!is_null($request->start_date)) $task->start_date = $request->start_date;
+        if (!is_null($request->due_date)) $task->due_date = $request->due_date;
+        if (!is_null($request->user_id)) $task->user_id = $request->user_id;
+        if (!is_null($request->project_id)) $task->project_id = $request->project_id;
+        
         $task->task_template_id = 0; //TODO take from request in next API version, defaulting all to 0 for now
 
         if($task->save()) {
-            return response()->json(['message' => 'Task saved to DB'], 200);
+            return response()->json(['message' => 'Task saved to DB', 'task' => $task], 200, [], JSON_NUMERIC_CHECK);
         }
 
         return response()->json(['error' => 'Problem saving task to DB'], 422);

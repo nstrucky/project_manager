@@ -12,6 +12,4 @@ class SearchController extends Controller
         $users = \App\User::search($request->q)->get();
         return response()->json($users);
     }
-
-
 }

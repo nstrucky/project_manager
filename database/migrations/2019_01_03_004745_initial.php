@@ -61,7 +61,7 @@ class Initial extends Migration
             $table->date('start_date')->nullable();
             $table->date('due_date')->nullable();
             $table->dateTime('completed_on')->nullable();
-            $table->integer('user_id');
+            $table->unsignedInteger('user_id');
             $table->unsignedInteger('project_id');
             $table->integer('task_template_id');
             $table->timestamps();
