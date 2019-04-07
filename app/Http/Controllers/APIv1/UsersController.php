@@ -51,11 +51,11 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|min:3|max:255',
-            'first_name' => 'required|min:3|max:255',
-            'last_name' => 'required|min:1|max:255',
-            'email' => 'required|min:3|max:500',
-            'user_role' => 'required|min:1|max:255', 
+            'username' => 'min:3|max:255',
+            'first_name' => 'min:3|max:255',
+            'last_name' => 'min:1|max:255',
+            'email' => 'min:3|max:500',
+            'user_role' => 'min:1|max:255', 
         ]);
 
         if ($validator->fails()) { // failure
@@ -82,14 +82,14 @@ class UsersController extends Controller
             return response()->json(['error' => 'User ' . $id .' does not exist'], 404);
         }
 
-        $user->username = $request->username;
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->user_role = $request->user_role;
+        if (!is_null($request->username)) $user->username = $request->username;
+        if (!is_null($request->first_name)) $user->first_name = $request->first_name;
+        if (!is_null($request->last_name)) $user->last_name = $request->last_name;
+        if (!is_null($request->email)) $user->email = $request->email;
+        if (!is_null($request->user_role)) $user->user_role = $request->user_role;
 
         if($user->save()) {
-            return response()->json(['message' => 'User saved to DB'], 200);
+            return response()->json(['message' => 'User saved to DB', 'user' => $user], 200, [], JSON_NUMERIC_CHECK);
         }
 
         return response()->json(['error' => 'Problem saving user to DB'], 422);

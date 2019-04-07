@@ -86,6 +86,8 @@ class ProjectsController extends Controller
             $project->work_order = $request->work_order;
             $project->due_date = $request->due_date;
             $project->status = $request->status;
+
+
             
             if($project->save()) {
                 $userProjectId = DB::table('user_project')->insertGetId([
@@ -145,13 +147,13 @@ class ProjectsController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3|max:255',
-            'account_name' => 'required|min:3|max:255',
-            'account_number' => 'required|min:1|max:6',
-            'description' => 'required|min:3|max:500',
-            'work_order' => 'required|min:1|max:6', // this just ignores the fact that you can name a work order the same as another
-            'due_date' => 'required|date_format:Y-m-d',
-            'status' => 'required|min:1|max:25'
+            'name' => 'min:3|max:255',
+            'account_name' => 'min:3|max:255',
+            'account_number' => 'min:1|max:6',
+            'description' => 'min:3|max:500',
+            'work_order' => 'min:1|max:6', // this just ignores the fact that you can name a work order the same as another
+            'due_date' => 'date_format:Y-m-d',
+            'status' => 'min:1|max:25'
         ]);
 
         if ($validator->fails()) { // failure
@@ -182,16 +184,16 @@ class ProjectsController extends Controller
             return response()->json(['error' => 'Project ' . $id .' does not exist'], 404);
         }
 
-        $project->name = $request->name;
-        $project->account_name = $request->account_name;
-        $project->account_number = $request->account_number;
-        $project->description = $request->description;
-        $project->work_order = $request->work_order;
-        $project->due_date = $request->due_date;
-        $project->status = $request->status;
+        if (!is_null($request->name)) $project->name = $request->name;
+        if (!is_null($request->account_name)) $project->account_name = $request->account_name;
+        if (!is_null($request->account_number)) $project->account_number = $request->account_number;
+        if (!is_null($request->description)) $project->description = $request->description;
+        if (!is_null($request->work_order)) $project->work_order = $request->work_order;
+        if (!is_null($request->due_date)) $project->due_date = $request->due_date;
+        if (!is_null($request->status)) $project->status = $request->status;
 
         if($project->save()) {
-            return response()->json(['message' => 'Project saved to DB'], 200);
+            return response()->json(['message' => 'Project saved to DB', 'project' => $project], 200, [], JSON_NUMERIC_CHECK);
         }
 
         return response()->json(['error' => 'Problem saving project to DB'], 422);
