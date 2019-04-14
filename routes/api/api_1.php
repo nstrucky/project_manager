@@ -14,6 +14,10 @@ use Lcobucci\JWT\Parser;
 |
 */
 
+Route::get('/test', function() {
+	response()->json(['message' => 'You are connected!']);
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();/*For this middleware, authorization in header must be in the form of "Bearer [access_token]}*/
 // The Access Token (Password Grant Token) returned will be unique to the user and will be how you find the authenticated user Auth::user();
@@ -76,4 +80,7 @@ Route::middleware('auth:api')->group(function() {
 	|-----------------------------------------------------------------------------
 	*/
 	Route::resource('/notes', 'APIv1\NotesController');
+
+
+
 });
