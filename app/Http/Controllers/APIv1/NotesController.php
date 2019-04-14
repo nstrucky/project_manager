@@ -1,24 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\APIv1;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+
 use \App\Note;
+use App\Http\Controllers\Controller;
 use Auth;
 
-class NotesController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+class NotesController extends Controller {
 
     /**
      * Show the form for creating a new resource.
@@ -26,6 +18,17 @@ class NotesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
         //
     }
@@ -86,19 +89,15 @@ class NotesController extends Controller
      */
     public function show($id)
     {
-        //
+        $note = \App\Note::find($id);
+        if (is_null($note)) {
+            return response()->json(['error' => 'Note does not exist'], 404);
+        }
+
+        return response()->json($note);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -109,7 +108,31 @@ class NotesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+                if (!Auth::check()) {
+            return response()->json(['error' => 'user not authenticated'], 422);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|min:3|max:500'
+        ]);
+
+        if ($validator->fails()) { // failure
+            $errors = $validator->errors();
+
+            return response()->json([
+                'error' => 'Validation Error, check variables input',
+                'content' => $errors->first('content')
+            ], 422);
+        }
+
+        $note = \App\Note::find($id);
+        if (is_null($note)) {
+            return response()->json(['error' => 'Note does not exist'], 404);
+        }
+        $note->content = $request->content;
+        $note->save();
+
+        return response()->json($note); 
     }
 
     /**
@@ -120,7 +143,23 @@ class NotesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!Auth::check()) {
+            return response()->json(['error' => 'user not authenticated'], 422);
+        }
+
+        $note = \App\Note::find($id);
+
+        if (is_null($note)) {
+            return response()->json(['error' => 'Note does not exist'], 404);
+        }
+
+        if ($note->delete()) { //success
+            return response()->json(['message' => 'Successfully deleted note: ',
+                                        'id' => $id], 200);
+        }
+        
+        return response()->json(['error' => 'Error removing note'], 400);
+        
     }
 
 
@@ -149,17 +188,24 @@ class NotesController extends Controller
         return response()->json($notes);
     }
 
-    // public function projectNotes($id) {
-    //     //select u.first_name, u.last_name, n.* from user_notes un inner join notes n on un.note_id = n.id inner join users u on un.user_id = u.id where n.project_id = 1;
 
-    //     $notes = DB::table('user_notes')
-    //         ->join('users', 'users.id', '=', 'user_notes.user_id')
-    //         ->join('notes', 'notes.id', '=', 'user_notes.note_id')
-    //         ->select('notes.*', 'users.first_name', 'users.last_name')
-    //         ->where('notes.project_id', $id)
-    //         ->orderby('notes.created_at', 'desc')
-    //         ->get();
+    /**
+    *--------------------------------------------------------------------
+    * Route: /users/{user}/notes
+    *--------------------------------------------------------------------
+    * @param int $id - user's id
+    */
+    public function userNotes($id) {
+        $user = \App\User::find($id);
 
-    //     return response()->json($notes);
-    // }
+        if (is_null($user)) {
+            return response()->json(['error' => 'Could not find user'], 422);
+        }
+
+        $notes = $user->notes;
+
+        return response()->json($notes);
+    }
+
 }
+?>

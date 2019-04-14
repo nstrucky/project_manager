@@ -9,10 +9,10 @@ class Task extends Model
     protected $guarded = [];
 
     public function project() {
-    	return $this->belongsTo(\App\Project::class);
+    	return $this->belongsTo(Project::class);
     }
 
     public function user() {
-    	return $this->belongsTo(\App\User::class);
+    	return $this->belongsTo(User::class);
     }
 }

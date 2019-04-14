@@ -40,25 +40,17 @@ class Initial extends Migration
         Schema::create('notes', function(Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('project_id');
+            $table->unsignedInteger('user_id');
             $table->text('content');
             $table->timestamps();   
 
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
 
-        Schema::create('user_notes', function(Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('note_id');
-            $table->timestamps();
-        });
-
         Schema::create('user_project', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('project_id');
-
-            $table->timestamps();
         });
 
         Schema::create('tasks', function(Blueprint $table) {
@@ -69,7 +61,7 @@ class Initial extends Migration
             $table->date('start_date')->nullable();
             $table->date('due_date')->nullable();
             $table->dateTime('completed_on')->nullable();
-            $table->integer('user_id');
+            $table->unsignedInteger('user_id');
             $table->unsignedInteger('project_id');
             $table->integer('task_template_id');
             $table->timestamps();

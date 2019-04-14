@@ -19,22 +19,22 @@ insert into projects(name, account_name, account_number, description, status, wo
 
 
 -- notes
-insert into notes(project_id, content, created_at, updated_at) 
-	values ('1', 'some content', '2019-01-01', '2019-01-01'),
-		 ('1', 'some more content', '2019-01-05', '2019-01-05'),
-		 ('1', 'even more good content', '2019-01-07', '2019-01-07'),
-		 ('2', 'content from project 2', '2019-01-07', '2019-01-07'),
-		 ('2', 'content from project 2', '2019-01-07', '2019-01-07'),
-		 ('2', 'content from project 2', '2019-01-07', '2019-01-07'),
-		 ('2', 'content from project 2', '2019-01-07', '2019-01-07'),
-		 ('1', 'This is going to be some really long content like I have a lot to say here hopefully its not too much trouble I just dont want this to go unsaid!  Anyway I was telling marge that I went to the store last week and saw Jimmy but he didnt wave at me what a jerk', '2019-01-07', '2019-01-07'),
-		 ('1', 'This project has gotten out of control', '2019-01-17', '2019-01-17'),
-		 ('1', 'Seriously, someone needs to stop this.', '2019-01-17', '2019-01-17'),
-		 ('1', 'Ok I guess it\'s never ending ever', '2019-01-17', '2019-01-17'),
-		 ('1', 'This is going to be some really long content like I have a lot to say here hopefully its not too much trouble I just dont want this to go unsaid!  Anyway I was telling marge that I went to the store last week and saw Jimmy but he didnt wave at me what a jerk', '2019-01-18', '2019-01-18'),
-		 ('1', 'This project has gotten out of control', '2019-01-18', '2019-01-18'),
-		 ('1', 'Seriously, someone needs to stop this.', '2019-01-18', '2019-01-18'),
-		 ('1', 'Ok I guess it\'s never ending ever', '2019-01-18', '2019-01-18');
+insert into notes(project_id, user_id, content, created_at, updated_at) 
+	values ('1', '1', 'some content', '2019-01-01', '2019-01-01'),
+		 ('1', '1', 'some more content', '2019-01-05', '2019-01-05'),
+		 ('1', '1', 'even more good content', '2019-01-07', '2019-01-07'),
+		 ('2', '1', 'content from project 2', '2019-01-07', '2019-01-07'),
+		 ('2', '1', 'content from project 2', '2019-01-07', '2019-01-07'),
+		 ('2', '2', 'content from project 2', '2019-01-07', '2019-01-07'),
+		 ('2', '2', 'content from project 2', '2019-01-07', '2019-01-07'),
+		 ('1', '1', 'This is going to be some really long content like I have a lot to say here hopefully its not too much trouble I just dont want this to go unsaid!  Anyway I was telling marge that I went to the store last week and saw Jimmy but he didnt wave at me what a jerk', '2019-01-07', '2019-01-07'),
+		 ('1', '1', 'This project has gotten out of control', '2019-01-17', '2019-01-17'),
+		 ('1', '1', 'Seriously, someone needs to stop this.', '2019-01-17', '2019-01-17'),
+		 ('1', '2', 'Ok I guess it\'s never ending ever', '2019-01-17', '2019-01-17'),
+		 ('1', '2', 'This is going to be some really long content like I have a lot to say here hopefully its not too much trouble I just dont want this to go unsaid!  Anyway I was telling marge that I went to the store last week and saw Jimmy but he didnt wave at me what a jerk', '2019-01-18', '2019-01-18'),
+		 ('1', '2', 'This project has gotten out of control', '2019-01-18', '2019-01-18'),
+		 ('1', '2', 'Seriously, someone needs to stop this.', '2019-01-18', '2019-01-18'),
+		 ('1', '2', 'Ok I guess it\'s never ending ever', '2019-01-18', '2019-01-18');
 
 
 -- tasks
@@ -63,11 +63,32 @@ insert into user_notes(user_id, note_id, created_at, updated_at)
 	('2', '15', '2019-01-17', '2019-01-17');
 
 
---users
+
+
+--user_project
+insert into user_project(user_id, project_id, created_at, updated_at) 
+	values
+	('1', '1', '2019-01-17', '2019-01-17'),
+	('1', '2', '2019-01-17', '2019-01-17'),
+	('1', '3', '2019-01-17', '2019-01-17'),
+	('1', '4', '2019-01-17', '2019-01-17'),
+	('1', '5', '2019-01-17', '2019-01-17'),
+	('1', '6', '2019-01-17', '2019-01-17'),
+	('1', '7', '2019-01-17', '2019-01-17'),
+	('2', '1', '2019-01-17', '2019-01-17'),
+	('2', '2', '2019-01-17', '2019-01-17'),
+	('2', '3', '2019-01-17', '2019-01-17'),
+	('2', '4', '2019-01-17', '2019-01-17'),
+	('2', '5', '2019-01-17', '2019-01-17'),
+	('2', '6', '2019-01-17', '2019-01-17'),
+	('2', '7', '2019-01-17', '2019-01-17'),
+	('3', '1', '2019-01-17', '2019-01-17'),
+	('3', '2', '2019-01-17', '2019-01-17'),
+	('3', '3', '2019-01-17', '2019-01-17');
+
+
+--users !! DON'T USE THIS ONE, NO PASSWORDS !!
 insert into users(first_name, last_name, user_role) 
 	values ('Nick', 'Struckmeyer', 'PM'), 
 			('Jeff', 'Girolimon', 'Engineer'),
 			('Liz', 'Heinrich', 'Engineer');
-
-
-
