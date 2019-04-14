@@ -14,9 +14,9 @@ use Lcobucci\JWT\Parser;
 |
 */
 
-Route::get('/test', function() {
-	response()->json(['message' => 'You are connected!']);
-});
+Route::get('/test', 'APIv1\TestController@test');
+Route::post('/test/new_note', 'APIv1\TestController@makeNote');
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();/*For this middleware, authorization in header must be in the form of "Bearer [access_token]}*/
@@ -80,7 +80,5 @@ Route::middleware('auth:api')->group(function() {
 	|-----------------------------------------------------------------------------
 	*/
 	Route::resource('/notes', 'APIv1\NotesController');
-
-
 
 });
