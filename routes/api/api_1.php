@@ -14,7 +14,7 @@ use Lcobucci\JWT\Parser;
 |
 */
 
-Route::get('/test', 'APIv1\TestController@test');
+// Route::get('/test', 'APIv1\TestController@test');
 Route::post('/test/new_note', 'APIv1\TestController@makeNote');
 
 
@@ -37,6 +37,8 @@ Route::post('/register', 'APIv1\Auth\RegisterController@register');
 
 Route::middleware('auth:api')->group(function() {
 
+
+	Route::get('/test', 'APIv1\TestController@test');
 
 	/*
 	|-----------------------------------------------------------------------------

@@ -34,6 +34,6 @@ class TestNoteCreated implements ShouldBroadcast
     public function broadcastOn()
     {
         // return new PrivateChannel('channel-name');
-        return ['test-notes'];
+        return ['test-notes-'.$this->note->project_id];
     }
 }
