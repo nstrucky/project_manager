@@ -224,7 +224,7 @@ class TasksController extends Controller
             ->join('projects', 'projects.id', '=', 'tasks.project_id')
             ->select('tasks.id', 'tasks.status', 'tasks.completed', 'tasks.title', 'tasks.start_date',
                 'tasks.due_date', 'tasks.completed_on',
-             'users.first_name', 'users.last_name', 'projects.name', 'tasks.project_id')
+             'users.first_name', 'users.last_name', 'projects.name', 'tasks.user_id', 'tasks.project_id')
             ->where('tasks.user_id', $id)
             ->orderby('tasks.due_date', 'desc')
             ->get();
@@ -249,7 +249,7 @@ class TasksController extends Controller
             ->join('users', 'users.id', '=', 'tasks.user_id')
             ->join('projects', 'projects.id', '=', 'tasks.project_id')
             ->select('tasks.id', 'tasks.status', 'tasks.completed', 'tasks.title', 'tasks.start_date', 'tasks.due_date', 'tasks.completed_on',
-             'users.first_name', 'users.last_name', 'projects.name', 'tasks.project_id')
+             'users.first_name', 'users.last_name', 'projects.name', 'tasks.user_id', 'tasks.project_id')
             ->where('tasks.project_id', $id)
             ->orderby('tasks.due_date', 'desc')
             ->get();
