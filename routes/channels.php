@@ -18,3 +18,7 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 Broadcast::channel('test-notes', function() {
 	return false;
 });
+
+Broadcast::channel('projects-channel', function() {
+	return true;//TODO change logic here
+});
