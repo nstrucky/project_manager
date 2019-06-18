@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
+use \App\Events\ProjectCreated;
+
 class ProjectsController extends Controller
 {
     /**
@@ -85,7 +87,11 @@ class ProjectsController extends Controller
             $project->work_order = $request->work_order;
             $project->due_date = $request->due_date;
             $project->status = $request->status;
+
             $project->save();
+
+            event(new ProjectCreated($project));
+
         }
     }
 
