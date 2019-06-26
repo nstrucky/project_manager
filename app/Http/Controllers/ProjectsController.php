@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-
+use Auth;
 use \App\Events\ProjectCreated;
 
 class ProjectsController extends Controller
@@ -45,6 +45,12 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
+        // if (!Auth::check()) {
+        //     return response()->json(['error' => 'user not authenticated'], 422);
+        // }
+
+        $userId = Auth::user()->id;
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3|max:255',
             'account_name' => 'required|min:3|max:255',
@@ -88,10 +94,22 @@ class ProjectsController extends Controller
             $project->due_date = $request->due_date;
             $project->status = $request->status;
 
-            $project->save();
+            if($project->save()) {
+                $userProjectId = DB::table('user_project')->insertGetId([
+                    'user_id' => $userId,
+                    'project_id' => $project->id
+                ]);
 
-            event(new ProjectCreated($project));
+                if (is_null($userProjectId) || $userProjectId == 0) {
+                    return response()->json(['error' => 'could not create user_project record'], 500);
+                }
+                event(new ProjectCreated($project));
+                return response()->json(['id' => $project->id,
+                                        'user_id' => $userId,
+                                        'message' => 'Project saved to DB'], 200);
 
+
+            }
         }
     }
 
