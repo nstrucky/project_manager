@@ -10,6 +10,7 @@ use \App\Events\TestNoteCreated;
 
 use \App\Note;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class TestController extends Controller
 {
@@ -43,6 +44,8 @@ class TestController extends Controller
 
 
     public function test(Request $request) {
-    	return response()->json(['message' => 'You are connected!']);
+	    return response()->json(['message' => 'You are connected!',
+	                             'user_id' => Auth::user()->id 
+	                            ]);
     }
 }
